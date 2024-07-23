@@ -4,8 +4,8 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 const Footer = () => {
   return (
-    <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-      <Container maxWidth="lg">
+    <Box sx={{ bgcolor: 'background.paper'}} component="footer">
+      <Box maxWidth="lg">
         <Typography variant="h4" align="left" gutterBottom>
           Contact
         </Typography>
@@ -67,7 +67,7 @@ const Footer = () => {
             title="Google Maps Location"
           ></iframe>
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 };

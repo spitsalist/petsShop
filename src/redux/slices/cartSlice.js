@@ -148,8 +148,7 @@
 
 
 
-// src/redux/slices/cartSlice.js
-// src/redux/slices/cartSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {

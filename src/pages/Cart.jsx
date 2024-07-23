@@ -512,8 +512,8 @@ const Cart = () => {
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <Container fullWidth sx={{ mt: 6, p: 1 }}>
-<Box sx={{ ml: 1, display: 'flex', alignItems: 'center' }}>
+    <Box fullWidth sx={{ my: 6 }}>
+<Box sx={{ display: 'flex', alignItems: 'center' }}>
   <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
     Shopping Cart
   </Typography>
@@ -534,7 +534,7 @@ const Cart = () => {
           Your cart is empty.
         </Typography>
       ) : (
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             {cartItems.map((item) => {
               const itemTotalPrice = item.price * item.quantity;
@@ -594,7 +594,7 @@ const Cart = () => {
             })}
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box sx={{ p: 3, backgroundColor: '#F1F3F4', borderRadius: 1, width: '100%' }}>
+            <Box sx={{ p: 3, backgroundColor: '#F1F3F4', borderRadius: 1 }}>
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Order details
               </Typography>
@@ -633,7 +633,7 @@ const Cart = () => {
       >
         Back to the store
       </Button>
-    </Container>
+    </Box>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Box, Container, IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, Box,  IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/system';
@@ -51,7 +51,6 @@ const StyledLink = styled(RouterLink)(({ theme }) => ({
   },
   fontSize: '16px',
   fontWeight: 'bold',
-  padding: '10px 0',
   [theme.breakpoints.down('md')]: {
     fontSize: '14px',
     width: '100%',
@@ -63,7 +62,7 @@ const StyledLink = styled(RouterLink)(({ theme }) => ({
 
 const Logo = styled('img')(({ theme }) => ({
   height: '70px',
-  // marginLeft: '10px',
+  marginLeft: '10px',
   [theme.breakpoints.down('md')]: {
     height: '40px',
   },
@@ -72,7 +71,7 @@ const Logo = styled('img')(({ theme }) => ({
 const ShoppingCartIcon = styled('img')(({ theme }) => ({
   height: '48px',
   cursor: 'pointer',
-  // marginRight: '10px',
+  marginRight: '10px',
   [theme.breakpoints.down('md')]: {
     height: '25px',
     marginRight: '10px',
@@ -139,9 +138,8 @@ const Header = () => {
 
   return (
     <AppBar position="static" sx={{ justifyContent: 'space-between', backgroundColor: 'white', color: 'black', boxShadow: 'none', borderBottom: '1px solid #DDDDDD' }}>
-      <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ flexDirection: { xs: 'row', md: 'row' }, alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: { xs: 1, md: 0 }, justifyContent: { xs: 'flex-start', md: 'flex-start' } }}>
+        <Toolbar disableGutters sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center'}}>
             <RouterLink to="/">
               <Logo src={logo} alt="Logo" />
             </RouterLink>
@@ -152,7 +150,6 @@ const Header = () => {
               edge="end"
               color="inherit"
               aria-label="menu"
-              sx={{ mr: 2 }}
               onClick={toggleDrawer(true)}
             >
               <MenuIcon />
@@ -166,7 +163,7 @@ const Header = () => {
             </Drawer>
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
             <NavList>
               <NavItem>
                 <StyledLink to="/">Main Page</StyledLink>
@@ -205,7 +202,6 @@ const Header = () => {
             </Menu>
           </Box>
         </Toolbar>
-      </Container>
     </AppBar>
   );
 };

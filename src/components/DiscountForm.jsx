@@ -71,7 +71,7 @@ const DiscountForm = () => {
   };
 
   return (
-    <Container>
+    <Box>
       <DiscountSection>
         <Typography
           variant="h4"
@@ -223,7 +223,7 @@ const DiscountForm = () => {
           </FormBox>
         </ContentBox>
       </DiscountSection>
-    </Container>
+    </Box>
   );
 };
 

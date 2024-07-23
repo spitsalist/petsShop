@@ -1,9 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Container, Typography, Grid, Card, CardMedia, Box } from '@mui/material';
+import { Typography, Grid, Card, CardMedia, Box, Divider, Button} from '@mui/material';
+import {styled} from "@mui/system";
 // import { addToCart } from '../redux/slices/cartSlice'; // Import the addToCart action
+
+const HeaderBox = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: theme.spacing(4),
+}));
+
+const DividerBox = styled(Box)(({ theme }) => ({
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
 
 const Categories = ({ displayedCategories }) => {
   const [categories, setCategories] = useState([]);
@@ -28,7 +43,18 @@ const Categories = ({ displayedCategories }) => {
   // };
 
   return (
-    <Container sx={{ mt: 6 }}>
+      <>
+      <HeaderBox>
+    
+          <Typography variant="h4" component="h4" src='categories/1' sx={{ fontWeight: 'bold'}}>
+              Categories
+          </Typography>
+          <DividerBox>
+              <Divider orientation="horizontal" flexItem sx={{ mx: 2 }} />
+          </DividerBox>
+          <Button variant="outlined">All categories</Button>
+      </HeaderBox>
+    <Box sx={{ mt: 6 }}>
       <Grid container spacing={4}>
         {categories.slice(0, displayedCategories).map(category => (
           <Grid item key={category.id} xs={12} sm={6} md={3}>
@@ -37,8 +63,10 @@ const Categories = ({ displayedCategories }) => {
                 <CardMedia
                   component="img"
                   height="280"
-                  sx={{ objectFit: 'contain', opacity: 1, cursor: 'pointer', '&:hover': { opacity: 0.9 } }}
-                  image={category.image ? `http://localhost:3333/${category.image}` : 'animals.jpg'}
+                  sx={{ objectFit: 'contain', 
+                    opacity: 1, 
+                    cursor: 'pointer', '&:hover': { opacity: 0.9 } }}
+                  image={category.image ? `http://localhost:3333/${category.image}` : 'pets product'}
                   alt={category.title}
                 />
               </RouterLink>
@@ -51,7 +79,8 @@ const Categories = ({ displayedCategories }) => {
           </Grid>
         ))}
       </Grid>
-    </Container>
+    </Box>
+      </>
   );
 };
 
