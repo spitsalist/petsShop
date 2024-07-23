@@ -26,10 +26,14 @@ const Sales = ({home = false}) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3333/products/all') 
+    axios.get('http://localhost:3333/products/all')
       .then(response => setProducts(home ? response.data.slice(0, 4) : response.data))
       .catch(error => console.error('Error fetching products:', error));
   }, [ home ]);
+
+  console.log(products);
+
+  const resultProducts = home ? products : filteredProducts
 
   return (
     <Box  sx={{ mt: 6 }}>
@@ -73,9 +77,10 @@ const Sales = ({home = false}) => {
           <Typography>Discounted items</Typography>
         )}
 
-        <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} onSale />
+      {!home && (
+        <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} onSale />)}
       <Grid container spacing={4}>
-        {filteredProducts.map(product => (
+        {resultProducts.map(product => (
           <Grid item key={product.id} xs={12} sm={6} md={3}>
               <CardComponent product={product} />
 

@@ -13,7 +13,7 @@ const Home = () => {
 
       <Box sx={{ mt: 4 }}>
 
-        <Categories displayedCategories={4} />
+        <Categories home />
       <Box my={4}>
         <DiscountForm />
         <Box my={4}>

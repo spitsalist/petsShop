@@ -20,17 +20,19 @@ const DividerBox = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const Categories = ({ displayedCategories }) => {
+const Categories = ({ home=false }) => {
   const [categories, setCategories] = useState([]);
+
   // const dispatch = useDispatch();
   // const cartItems = useSelector((state) => state.cart.items);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   useEffect(() => {
     axios.get('http://localhost:3333/categories/all')
-      .then(response => setCategories(response.data))
+      .then(response => setCategories(home? response.data.slice(0, 4) : response.data))
       .catch(error => console.error('Error fetching categories:', error));
   }, []);
+
 
   // const handleAddToCart = (category) => {
   //   const product = {
@@ -44,6 +46,7 @@ const Categories = ({ displayedCategories }) => {
 
   return (
       <>
+          {!home && (
           <Breadcrumbs aria-label="breadcrumb">
               <NavLink underline="hover" color="inherit" to="/">
                   Main page
@@ -52,6 +55,7 @@ const Categories = ({ displayedCategories }) => {
                   All categories
               </NavLink>
           </Breadcrumbs>
+              )}
       <HeaderBox>
     
           <Typography variant="h4" component="h4" src='categories/1' sx={{ fontWeight: 'bold'}}>
@@ -64,7 +68,7 @@ const Categories = ({ displayedCategories }) => {
       </HeaderBox>
     <Box sx={{ mt: 6 }}>
       <Grid container spacing={4}>
-        {categories.slice(0, displayedCategories).map(category => (
+        {categories.map(category => (
           <Grid item key={category.id} xs={12} sm={6} md={3}>
             <Card sx={{ background: 'none', boxShadow: 'none', textAlign: 'center' }}>
               <RouterLink to={`/categories/${category.id}`} style={{ textDecoration: 'none' }}>
