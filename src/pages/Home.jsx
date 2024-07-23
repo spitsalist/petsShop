@@ -17,7 +17,7 @@ const Home = () => {
       <Box my={4}>
         <DiscountForm />
         <Box my={4}>
-          <Sales sliceSales />
+          <Sales home />
         </Box>
       </Box>
     </Box>

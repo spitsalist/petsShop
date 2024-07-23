@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Link as RouterLink } from 'react-router-dom';
+import {Link, Link as RouterLink, NavLink} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Typography, Grid, Card, CardMedia, Box, Divider, Button} from '@mui/material';
+import {Typography, Grid, Card, CardMedia, Box, Divider, Button, Breadcrumbs} from '@mui/material';
 import {styled} from "@mui/system";
 // import { addToCart } from '../redux/slices/cartSlice'; // Import the addToCart action
 
@@ -44,6 +44,14 @@ const Categories = ({ displayedCategories }) => {
 
   return (
       <>
+          <Breadcrumbs aria-label="breadcrumb">
+              <NavLink underline="hover" color="inherit" to="/">
+                  Main page
+              </NavLink>
+              <NavLink underline="hover" color="inherit" to="/categories">
+                  All categories
+              </NavLink>
+          </Breadcrumbs>
       <HeaderBox>
     
           <Typography variant="h4" component="h4" src='categories/1' sx={{ fontWeight: 'bold'}}>

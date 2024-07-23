@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Box,  IconButton, Menu, MenuItem, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link as RouterLink } from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import { styled } from '@mui/system';
 import logo from './../assets/logo.svg';
 import shoppingCart from './../assets/shopingCard.svg';
@@ -87,16 +87,8 @@ const BasketFullIcon = styled('img')(({ theme }) => ({
 }));
 
 const Header = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -105,7 +97,6 @@ const Header = () => {
     setDrawerOpen(open);
   };
 
-  const isMenuOpen = Boolean(anchorEl);
 
   const drawer = (
     <Box
@@ -180,27 +171,10 @@ const Header = () => {
             </NavList>
           </Box>
 
-          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-            <IconButton edge="end" color="inherit" onClick={handleMenuOpen}>
+            <IconButton edge="end" color="inherit" onClick={()=>navigate('/cart')} sx={{ display: { xs: 'none', md: 'block' } }}>
               <ShoppingCartIcon src={shoppingCart} alt="Shopping cart" />
             </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={isMenuOpen}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <MenuItem onClick={handleMenuClose}>View Cart</MenuItem>
-              <MenuItem onClick={handleMenuClose}>Checkout</MenuItem>
-            </Menu>
-          </Box>
+
         </Toolbar>
     </AppBar>
   );

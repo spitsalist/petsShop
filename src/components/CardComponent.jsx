@@ -1,13 +1,17 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import { addToCart } from "../redux/slices/cartSlice.js";
+import {Box, Button, Card, CardActions, CardContent, CardMedia, Link, Typography} from "@mui/material";
+import {Link as RouterLink, useNavigate} from "react-router-dom";
+import {addToCart, removeFromCart} from "../redux/slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
 const CardComponent = ({ product }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [isHovered, setIsHovered] = useState(false);
-    const handleAddToCart = (product) => {
+    const handleAddToCart = (product, e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         dispatch(addToCart({
             id: product.id,
             title: product.title,
@@ -17,14 +21,25 @@ const CardComponent = ({ product }) => {
             quantity: 1,
         }));
     };
+
+    const handleRemoveFromCart = (product, e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        dispatch(removeFromCart(product.id));
+    }
     const cartItems = useSelector((state) => state.cart.items);
 
     const isInCart = (productId) => {
         return cartItems.some(item => item.id === productId);
     };
+    const redirectToProduct = () => {
+        navigate(`/products/${product.id}`);
+    }
 
     return (
-        <Box 
+        <Box
+            onClick={redirectToProduct}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -64,6 +79,7 @@ const CardComponent = ({ product }) => {
                 <CardMedia
                     component="img"
                     sx={{
+                        height: '200px',
                         objectFit: 'contain',
                         opacity: 1,
                         cursor: 'pointer',
@@ -83,24 +99,43 @@ const CardComponent = ({ product }) => {
                         
                         padding: '10px',
                     }}>
-                        <Button
-                        component={RouterLink}
-                        to={`/products/${product.id}`}
-                            size="md"
-                            onClick={() => handleAddToCart(product)}
-                            variant={isInCart(product.id) ? 'outlined' : 'contained'}
-                            sx={{ 
-                                width: '100%', 
-                                color: 'white',
-                                backgroundColor: isInCart(product.id) ? 'black' : 'primary.main',
-                                '&:hover': {
-                                    backgroundColor: '#ccc',
-                                    borderColor: '#ccc',
-                                }
-                            }}
-                        >
-                            {isInCart(product.id) ? 'Added' : 'Add to Cart'}
-                        </Button>
+                        {isInCart(product.id) ? (
+                            <Button
+                                size="md"
+                                onClick={(e) => handleRemoveFromCart(product, e)}
+                                variant="outlined"
+                                sx={{
+                                    width: '100%',
+                                    color: 'white',
+                                    borderColor: 'black',
+                                    backgroundColor: 'black',
+                                    '&:hover': {
+                                        backgroundColor: '#ccc',
+                                        borderColor: '#ccc',
+                                    }
+                                }}
+                            >
+                                Remove from cart
+                            </Button>
+                        ) : (
+                            <Button
+                                size="md"
+                                onClick={(e) => handleAddToCart(product, e)}
+                                variant="contained"
+                                sx={{
+                                    width: '100%',
+                                    color: 'white',
+                                    backgroundColor: 'primary.main',
+                                    '&:hover': {
+                                        backgroundColor: '#ccc',
+                                        borderColor: '#ccc',
+                                    }
+                                }}
+                            >
+                                Add to Cart
+                            </Button>
+                        )}
+
                     </Box>
                 )}
             </Box>

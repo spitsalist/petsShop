@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
-import { Grid,   Button, Typography, Box, Divider } from '@mui/material';
+import {Grid, Button, Typography, Box, Divider, Link, Breadcrumbs} from '@mui/material';
 import { styled } from '@mui/system';
 import CardComponent from "../components/CardComponent.jsx";
+import FilterDefinition from "../components/FilterDefinition.jsx";
 
 const HeaderBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -20,17 +21,32 @@ const DividerBox = styled(Box)(({ theme }) => ({
   margin: theme.spacing(0, 2),
 }));
 
-const Sales = ({sliceSales = false}) => {
+const Sales = ({home = false}) => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:3333/products/all') 
-      .then(response => setProducts(sliceSales ? response.data.slice(0, 4) : response.data)) 
+      .then(response => setProducts(home ? response.data.slice(0, 4) : response.data))
       .catch(error => console.error('Error fetching products:', error));
-  }, [ sliceSales ]);
+  }, [ home ]);
 
   return (
     <Box  sx={{ mt: 6 }}>
+
+        {!home && (
+            <Breadcrumbs aria-label="breadcrumb">
+                <Link underline="hover" color="inherit" href="/">
+                    Main page
+                </Link>
+                <Link underline="hover" color="inherit" href="/sales/all">
+                    All Sales
+                </Link>
+            </Breadcrumbs>
+        )}
+
+        {home ? (
+
       <HeaderBox>
         <Typography variant="h4" component="h4" sx={{ fontWeight: 'bold', paddingRight: 2 }}>
           Sales
@@ -39,28 +55,27 @@ const Sales = ({sliceSales = false}) => {
           <Divider orientation="horizontal" flexItem sx={{ width: '100%' }} />
         </DividerBox>
         <Button
-          sx={{ 
-            textTransform: 'none', 
-            width: 'auto', 
-            height: '36px', 
-            textAlign: 'center', 
-            padding: '0 16px', 
-            whiteSpace: 'nowrap' 
-          }} 
-          variant="outlined" 
-          component={RouterLink} 
+          sx={{
+            textTransform: 'none',
+            width: 'auto',
+            height: '36px',
+            textAlign: 'center',
+            padding: '0 16px',
+            whiteSpace: 'nowrap'
+          }}
+          variant="outlined"
+          component={RouterLink}
           to="/sales/all"
         >
           All sales
         </Button>
+      </HeaderBox>) : (
+          <Typography>Discounted items</Typography>
+        )}
 
-
-
-
-      </HeaderBox>
-
+        <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} onSale />
       <Grid container spacing={4}>
-        {products.map(product => (
+        {filteredProducts.map(product => (
           <Grid item key={product.id} xs={12} sm={6} md={3}>
               <CardComponent product={product} />
 
