@@ -8,15 +8,29 @@ export const fetchCategoryById = createAsyncThunk(
     return response.data;
   }
 );
-
+const initialState = {
+  categoryData: null,
+  isLoading: false,
+  isError: false,
+  message: '',
+}
 const categoriesSlice = createSlice({
   name: 'categories',
-  initialState: {
-    categoryData: null,
-    isLoading: false,
-    isError: false,
-    message: '',
+  // initialState: {
+  //   categoryData: null,
+  //   isLoading: false,
+  //   isError: false,
+  //   message: '',
+  // },
+
+  initialState: initialState,
+  reducers: {
+    resetState: (state) => {
+      return initialState
+      
+    }
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategoryById.pending, (state) => {
@@ -34,4 +48,5 @@ const categoriesSlice = createSlice({
   },
 });
 
+export const { resetState } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

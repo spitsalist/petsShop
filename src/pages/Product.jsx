@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Grid, Typography, CircularProgress, Box } from '@mui/material';
 import CardComponent from '../components/CardComponent.jsx';
-import SortAndFilter from '../components/SortAndFilter';
+// import SortAndFilter from '../components/SortAndFilter';
 import FilterDefinition from "../components/FilterDefinition.jsx";
 
 const Products = () => {

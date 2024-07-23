@@ -16,10 +16,13 @@ const FilterDefinition = ({ setFilteredProducts, products, onSale=false }) => {
     const [maxPrice, setMaxPrice] = useState('');
     const [showDiscounted, setShowDiscounted] = useState(onSale);
     useEffect(() => {
-        if (!products) {
-            return;
-        }
+        // if (!products) {
+        //     return;
+        // }
         const applyPriceFilter = (products) => {
+            if (!products) {
+                return products;
+            }
             return products.filter((product) => {
                 const price = product.discont_price || product.price;
                 if (minPrice && price < minPrice) return false;
