@@ -543,7 +543,6 @@ const Cart = () => {
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
-  console.log(isSmallScreen)
 
   return (
     <Box sx={{ my: 6 }}>

@@ -19,6 +19,7 @@ const CardComponent = ({ product }) => {
             title: product.title,
             image: product.image,
             price: product.discont_price || product.price,
+            originalPrice: product.price,
             totalPrice: product.discont_price || product.price,
             quantity: 1,
         }));
