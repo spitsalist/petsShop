@@ -562,7 +562,7 @@ const Cart = () => {
                 <Card key={item.id} sx={{ display: 'flex', mb: 2, p: 2, flexDirection: { xs: 'column', md: 'row' } }}>
                   <CardMedia
                     component="img"
-                    sx={{ width: 200, transition: 'transform 0.3s ease', ":hover": { transform: 'scale(1.05)', opacity: 0.8 } }}
+                    sx={{ width: '200px', height: '200px', objectFit: 'contain', transition: 'transform 0.3s ease', ":hover": { transform: 'scale(1.05)', opacity: 0.8 } }}
                     image={item.image ? `http://localhost:3333/${item.image}` : 'shopping cart placeholder'}
                     alt={item.title}
                   />
