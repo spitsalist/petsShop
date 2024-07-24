@@ -78,7 +78,7 @@ const FilterDefinition = ({ setFilteredProducts, products, onSale=false }) => {
         setShowDiscounted(event.target.checked);
     };
     return (
-        <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 4 }}>
+        <Box display="flex" alignItems="center"  sx={{ mb: 4 }}>
             <Typography variant="body1" sx={{ mr: 2 }}>Price</Typography>
             <TextField
                 label="from"
@@ -99,7 +99,7 @@ const FilterDefinition = ({ setFilteredProducts, products, onSale=false }) => {
             {!onSale && (
             <FormControlLabel
                 control={<Checkbox checked={showDiscounted} onChange={handleDiscountChange} />}
-                label="Discounted items"
+                label="Discounted item"
                 sx={{ mr: 4 }}
             />)}
             <Typography variant="body1" sx={{ mr: 2 }}>Sorted</Typography>
@@ -108,6 +108,8 @@ const FilterDefinition = ({ setFilteredProducts, products, onSale=false }) => {
                     value={sortOption}
                     onChange={handleSortChange}
                     displayEmpty
+                    
+                    sx={{ width: 200 }}
                 >
                     <MenuItem value="default">by default</MenuItem>
                     <MenuItem value="priceAsc">Price: Low to High</MenuItem>

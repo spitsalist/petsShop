@@ -1,8 +1,9 @@
 import React from 'react';
-import { Container, Box, Typography, TextField, Button } from '@mui/material';
+import {  Box, Typography, TextField, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import { useForm, Controller } from 'react-hook-form';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { saleRequestSend } from './../redux/slices/saleRequestSlice';
 import PetImage from './../assets/images/pets.png';
 
 const DiscountSection = styled(Box)(({ theme }) => ({
@@ -59,15 +60,11 @@ const PetImageBox = styled(Box)(({ theme }) => ({
 
 const DiscountForm = () => {
   const { control, handleSubmit, reset } = useForm();
+  const dispatch = useDispatch();
 
-  const onSubmit = async (data) => {
-    try {
-      const response = await axios.post('http://localhost:3333/sale/send', data);
-      console.log('Success:', response.data);
-      reset();
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const onSubmit = (data) => {
+    dispatch(saleRequestSend(data));
+    reset();
   };
 
   return (

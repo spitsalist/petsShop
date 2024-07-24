@@ -1,13 +1,15 @@
-import {Box, Button, Card, CardActions, CardContent, CardMedia, Link, Typography} from "@mui/material";
-import {Link as RouterLink, useNavigate} from "react-router-dom";
-import {addToCart, removeFromCart} from "../redux/slices/cartSlice.js";
+import { Box, Button, CardContent, CardMedia, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import { addToCart, removeFromCart } from "../redux/slices/cartSlice.js";
 
 const CardComponent = ({ product }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isHovered, setIsHovered] = useState(false);
+    const cartItems = useSelector((state) => state.cart.items);
+
     const handleAddToCart = (product, e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -27,15 +29,13 @@ const CardComponent = ({ product }) => {
         e.stopPropagation();
 
         dispatch(removeFromCart(product.id));
-    }
-    const cartItems = useSelector((state) => state.cart.items);
-
-    const isInCart = (productId) => {
-        return cartItems.some(item => item.id === productId);
     };
+
+    const isInCart = (productId) => cartItems.some(item => item.id === productId);
+
     const redirectToProduct = () => {
         navigate(`/products/${product.id}`);
-    }
+    };
 
     return (
         <Box
@@ -44,19 +44,12 @@ const CardComponent = ({ product }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                
-                // width: '260px',
-                // transition: 'transform 0.3s, box-shadow 0.3s',
-                // '&:hover': {
-                //     transform: 'scale(1.05)',
-                //     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-                // },
                 borderRadius: 1,
                 border: '1px solid #e0e0e0',
                 position: 'relative',
+                cursor: 'pointer',
+                '&:hover': { boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)' }
             }}
-
-
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -82,7 +75,6 @@ const CardComponent = ({ product }) => {
                         height: '200px',
                         objectFit: 'contain',
                         opacity: 1,
-                        cursor: 'pointer',
                         '&:hover': { opacity: 0.9 }
                     }}
                     image={product.image ? `http://localhost:3333/${product.image}` : 'https://via.placeholder.com/200'}
@@ -96,22 +88,21 @@ const CardComponent = ({ product }) => {
                         right: 0,
                         display: 'flex',
                         justifyContent: 'center',
-                        
                         padding: '10px',
+                        // backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        backgroundColor: 'black',
                     }}>
                         {isInCart(product.id) ? (
                             <Button
-                                size="md"
+                                size="medium"
                                 onClick={(e) => handleRemoveFromCart(product, e)}
                                 variant="outlined"
                                 sx={{
                                     width: '100%',
                                     color: 'white',
-                                    borderColor: 'black',
-                                    backgroundColor: 'black',
+                                    borderColor: 'white',
                                     '&:hover': {
-                                        backgroundColor: '#ccc',
-                                        borderColor: '#ccc',
+                                        // backgroundColor: 'rgba(255, 255, 255, 0.1)',
                                     }
                                 }}
                             >
@@ -119,30 +110,26 @@ const CardComponent = ({ product }) => {
                             </Button>
                         ) : (
                             <Button
-                                size="md"
+                                size="medium"
                                 onClick={(e) => handleAddToCart(product, e)}
                                 variant="contained"
                                 sx={{
                                     width: '100%',
-                                    color: 'white',
-                                    backgroundColor: 'primary.main',
+                                    // backgroundColor: 'secondary.main',
                                     '&:hover': {
-                                        backgroundColor: '#ccc',
-                                        borderColor: '#ccc',
+                                        // backgroundColor: 'primary.dark',
                                     }
                                 }}
                             >
                                 Add to Cart
                             </Button>
                         )}
-
                     </Box>
                 )}
             </Box>
             <CardContent sx={{
                 flex: '1 0 auto',
                 padding: 2,
-                gap: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
@@ -157,7 +144,8 @@ const CardComponent = ({ product }) => {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         color: '#282828',
-                    }}>
+                    }}
+                >
                     {product.title}
                 </Typography>
                 <Typography variant="h6" sx={{ fontSize: '14px' }}>
@@ -177,18 +165,8 @@ const CardComponent = ({ product }) => {
                     )}
                 </Typography>
             </CardContent>
-            <CardActions sx={{ padding: '16px', justifyContent: 'center' }}>
-
-            </CardActions>
         </Box>
     );
 };
 
 export default CardComponent;
-
-
-
-
-
-
-

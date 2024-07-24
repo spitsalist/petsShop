@@ -467,39 +467,41 @@
 
 
 
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart,  incrementQuantity, decrementQuantity } from '../redux/slices/cartSlice';
-import { Container, Grid, Card, CardContent, CardMedia, Typography, Button, Box, TextField } from '@mui/material';
+import { removeFromCart, incrementQuantity, decrementQuantity } from '../redux/slices/cartSlice';
+import { saleRequestSend } from '../redux/slices/saleRequestSlice';
+import { Container, Grid, Card, CardContent, CardMedia, Typography, Button, Box, TextField, CircularProgress, Alert } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from '@mui/material/styles/styled';
-import {Divider} from '@mui/material';
+import { Divider } from '@mui/material';
 
 const calculateDiscount = (originalPrice, discountPrice) => {
   if (!originalPrice || !discountPrice || originalPrice <= discountPrice) return 0;
   return Math.round(((originalPrice - discountPrice) / originalPrice) * 100);
 };
 
+const DividerBox = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
 const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
+  const { isLoading, isError, isSuccess, message } = useSelector((state) => state.saleRequest);
+
+  const [customerDetails, setCustomerDetails] = useState({
+    name: '',
+    phoneNumber: '',
+    email: '',
+  });
 
   const handleRemoveFromCart = (id) => {
     dispatch(removeFromCart(id));
   };
-
-  const DividerBox = styled(Box)(({ theme }) => ({
-    flexGrow: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-
-  // const handleClearCart = () => {
-  //   dispatch(clearCart());
-  // };
 
   const handleIncrementQuantity = (id) => {
     dispatch(incrementQuantity(id));
@@ -509,26 +511,40 @@ const Cart = () => {
     dispatch(decrementQuantity(id));
   };
 
+  const handleChange = (e) => {
+    setCustomerDetails({ ...customerDetails, [e.target.name]: e.target.value });
+  };
+
+  const handleOrder = () => {
+    const orderDetails = {
+      customerDetails,
+      items: cartItems,
+      totalAmount,
+    };
+    dispatch(saleRequestSend(orderDetails));
+  };
+
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
-    <Box fullWidth sx={{ my: 6 }}>
-<Box sx={{ display: 'flex', alignItems: 'center' }}>
-  <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-    Shopping Cart
-  </Typography>
-  <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', mx: 2 }}>
-    <Divider orientation="horizontal" flexItem sx={{ width: '100%' }} />
-  </Box>
-  <Button
-    variant="outlined"
-    component={RouterLink}
-    to="/sales/all"
-    sx={{ color: '#8B8B8B', fontSize: '14px' }}
-  >
-    Back to the store
-  </Button>
-</Box>
+    <Box sx={{ my: 6 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+          Shopping Cart
+        </Typography>
+        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', mx: 2 }}>
+          <Divider orientation="horizontal" flexItem sx={{ width: '100%' }} />
+        </Box>
+        <Button
+          variant="outlined"
+          component={RouterLink}
+          to="/sales/all"
+          sx={{ color: '#8B8B8B', fontSize: '14px' }}
+        >
+          Back to the store
+        </Button>
+      </Box>
       {cartItems.length === 0 ? (
         <Typography variant="h6" component="div">
           Your cart is empty.
@@ -544,8 +560,8 @@ const Cart = () => {
                 <Card key={item.id} sx={{ display: 'flex', mb: 2, p: 2 }}>
                   <CardMedia
                     component="img"
-                    sx={{ width: 200, transition: 'transform 0.3s ease', ":hover" : { transform: 'scale(1.05)', opacity: 0.8 } }}
-                    image={item.image ? `http://localhost:3333/${item.image}` : 'shoping cart pets '}
+                    sx={{ width: 200, transition: 'transform 0.3s ease', ":hover": { transform: 'scale(1.05)', opacity: 0.8 } }}
+                    image={item.image ? `http://localhost:3333/${item.image}` : 'shopping cart placeholder'}
                     alt={item.title}
                   />
                   <CardContent sx={{ flex: 1 }}>
@@ -560,7 +576,7 @@ const Cart = () => {
                       >
                         {item.title}
                       </Typography>
-                      <Button variant="text" sx={{ fontFamily: 'Montserrat', fontSize: '16px', color: '#ccc', borderRadius: '2px', fontWeight: 'bold', ":hover" : {color: 'red'} }} onClick={() => handleRemoveFromCart(item.id)}>X</Button>
+                      <Button variant="text" sx={{ fontFamily: 'Montserrat', fontSize: '16px', color: '#ccc', borderRadius: '2px', fontWeight: 'bold', ":hover": { color: 'red' } }} onClick={() => handleRemoveFromCart(item.id)}>X</Button>
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', borderRadius: '4px', p: 1 }}>
@@ -569,24 +585,24 @@ const Cart = () => {
                         <Button variant="outlined" sx={{ borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc' }} onClick={() => handleIncrementQuantity(item.id)}>+</Button>
                       </Box>
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-  {item.originalPrice && item.price < item.originalPrice ? (
-    <>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
-        ${itemTotalPrice.toFixed(0)}
-      </Typography>
-      <Typography variant="body2" color="textSecondary" sx={{ textDecoration: 'line-through', textAlign: 'left' }}>
-        ${itemOriginalTotalPrice.toFixed(2)}
-      </Typography>
-      <Typography variant="body2" sx={{ color: 'green', textAlign: 'left' }}>
-        -{calculateDiscount(item.originalPrice, item.price)}%
-      </Typography>
-    </>
-  ) : (
-    <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
-      ${itemTotalPrice.toFixed(0)}
-    </Typography>
-  )}
-</Box>
+                        {item.originalPrice && item.price < item.originalPrice ? (
+                          <>
+                            <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+                              ${itemTotalPrice.toFixed(2)}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" sx={{ textDecoration: 'line-through', textAlign: 'left' }}>
+                              ${itemOriginalTotalPrice.toFixed(2)}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'green', textAlign: 'left' }}>
+                              -{calculateDiscount(item.originalPrice, item.price)}%
+                            </Typography>
+                          </>
+                        ) : (
+                          <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+                            ${itemTotalPrice.toFixed(2)}
+                          </Typography>
+                        )}
+                      </Box>
                     </Box>
                   </CardContent>
                 </Card>
@@ -598,29 +614,19 @@ const Cart = () => {
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Order details
               </Typography>
-              <Typography variant="h5" color={'textSecondary'}>{totalItems} items</Typography> 
-              <Typography variant="h5" color={'textSecondary'} sx={{ marginTop: 2, position: 'absolute' }}>total</Typography> 
-              <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'right' }}>
+              <Typography variant="h5" color={'textSecondary'}>{totalItems} items</Typography>
+              <Typography variant="h5" color={'textSecondary'} sx={{ marginTop: 2 }}>Total</Typography>
+              <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'right', position: 'relative' }}>
                 ${totalAmount.toFixed(2)}
               </Typography>
-              <TextField fullWidth label="Name" margin="normal"  
-              sx={{backgroundColor: 'white'}}/>
-              <TextField fullWidth label="Phone number" margin="normal" 
-              sx={{backgroundColor: 'white'}}/>
-              <TextField fullWidth label="Email" margin="normal" 
-              sx={{backgroundColor: 'white'}}/>
-              <Button variant="contained" color="primary" fullWidth>
-                Order
+              <TextField fullWidth label="Name" name="name" margin="normal" sx={{ backgroundColor: 'white' }} onChange={handleChange} />
+              <TextField fullWidth label="Phone number" name="phoneNumber" margin="normal" sx={{ backgroundColor: 'white' }} onChange={handleChange} />
+              <TextField fullWidth label="Email" name="email" margin="normal" sx={{ backgroundColor: 'white' }} onChange={handleChange} />
+              <Button variant="contained" color="primary" fullWidth onClick={handleOrder} disabled={isLoading}>
+                {isLoading ? <CircularProgress size={24} /> : 'Order'}
               </Button>
-              {/* <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleClearCart}
-                sx={{ mt: 2 }}
-                fullWidth
-              >
-                Clear Cart
-              </Button> */}
+              {isError && <Alert severity="error">{message}</Alert>}
+              {isSuccess && <Alert severity="success">Order placed successfully!</Alert>}
             </Box>
           </Grid>
         </Grid>
@@ -628,7 +634,7 @@ const Cart = () => {
       <Button
         variant="contained"
         component={RouterLink}
-        to="/"
+        to="/sales/all"
         sx={{ mt: 2 }}
       >
         Back to the store
@@ -638,20 +644,6 @@ const Cart = () => {
 };
 
 export default Cart;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React from 'react';
 // import { useSelector, useDispatch } from 'react-redux';

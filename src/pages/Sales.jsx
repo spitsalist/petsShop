@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Grid, Typography, CircularProgress, Box, Button, Breadcrumbs, Link, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import axios from 'axios';
-import {Grid, Button, Typography, Box, Divider, Link, Breadcrumbs} from '@mui/material';
-import { styled } from '@mui/system';
 import CardComponent from "../components/CardComponent.jsx";
 import FilterDefinition from "../components/FilterDefinition.jsx";
+import { fetchAllProducts } from '../redux/slices/productsSlice';
+import { styled } from '@mui/system';
 
 const HeaderBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'space-between',
   marginBottom: theme.spacing(4),
 }));
 
@@ -21,69 +23,91 @@ const DividerBox = styled(Box)(({ theme }) => ({
   margin: theme.spacing(0, 2),
 }));
 
-const Sales = ({home = false}) => {
-  const [products, setProducts] = useState([]);
+const Sales = ({ home = false }) => {
+  const dispatch = useDispatch();
+  const { products = [], isLoading, isError, message } = useSelector((state) => state.products); // Initialize products as an empty array
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3333/products/all')
-      .then(response => setProducts(home ? response.data.slice(0, 4) : response.data))
-      .catch(error => console.error('Error fetching products:', error));
-  }, [ home ]);
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
 
-  console.log(products);
+  useEffect(() => {
+    if (home) {
+      setFilteredProducts(products.slice(0, 4));
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [products, home]);
 
-  const resultProducts = home ? products : filteredProducts
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Typography variant="h6" color="error">
+          {message || 'Error loading products.'}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
-    <Box  sx={{ mt: 6 }}>
-
-        {!home && (
-            <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="/">
-                    Main page
-                </Link>
-                <Link underline="hover" color="inherit" href="/sales/all">
-                    All Sales
-                </Link>
-            </Breadcrumbs>
-        )}
-
-        {home ? (
+    <Box sx={{ mt: 6 }}>
+      {!home && (
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link underline="hover" color="inherit" component={RouterLink} to="/">
+            Main page
+          </Link>
+          <Link underline="hover" color="inherit" component={RouterLink} to="/sales/all">
+            All Sales
+          </Link>
+        </Breadcrumbs>
+      )}
 
       <HeaderBox>
-        <Typography variant="h4" component="h4" sx={{ fontWeight: 'bold', paddingRight: 2 }}>
-          Sales
+        <Typography variant="h4" component="h2" sx={{ whiteSpace: 'nowrap', mt: 5, fontWeight: 'bold' }}>
+          {home ? 'Sales' : 'Discounted Item'}
         </Typography>
         <DividerBox>
-          <Divider orientation="horizontal" flexItem sx={{ width: '100%' }} />
+          <Divider orientation="horizontal" flexItem sx={{ width: '100%', mt: 5 }} />
         </DividerBox>
-        <Button
-          sx={{
-            textTransform: 'none',
-            width: 'auto',
-            height: '36px',
-            textAlign: 'center',
-            padding: '0 16px',
-            whiteSpace: 'nowrap'
-          }}
-          variant="outlined"
-          component={RouterLink}
-          to="/sales/all"
-        >
-          All sales
-        </Button>
-      </HeaderBox>) : (
-          <Typography>Discounted items</Typography>
+        {home && (
+          <Button
+            sx={{
+              textTransform: 'none',
+              width: 'auto',
+              height: '36px',
+              textAlign: 'center',
+              padding: '0 16px',
+              whiteSpace: 'nowrap',
+              mt: 5,
+
+              
+            }}
+            variant="outlined"
+            component={RouterLink}
+            to="/sales/all"
+          >
+            All sales
+          </Button>
         )}
+      </HeaderBox>
 
       {!home && (
-        <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} onSale />)}
-      <Grid container spacing={4}>
-        {resultProducts.map(product => (
-          <Grid item key={product.id} xs={12} sm={6} md={3}>
-              <CardComponent product={product} />
+        <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} onSale />
+      )}
 
+      <Grid container spacing={4}>
+        {filteredProducts.map(product => (
+          <Grid item key={product.id} xs={12} sm={6} md={3}>
+            <CardComponent product={product} />
           </Grid>
         ))}
       </Grid>
@@ -92,117 +116,3 @@ const Sales = ({home = false}) => {
 };
 
 export default Sales;
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { Container, Grid, Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
-
-// const DiscountedSales = () => {
-//   const [products, setProducts] = useState([]);
-
-//   useEffect(() => {
-//     axios.get('http://localhost:3333/products/all')
-//       .then(response => {
-//         const discountedProducts = response.data.filter(product => product.discont_price < product.price);
-//         setProducts(discountedProducts);
-//       })
-//       .catch(error => console.error('Error fetching products:', error));
-//   }, []);
-
-//   return (
-//     <Container maxWidth="lg" sx={{ mt: 4 }}>
-//       <Typography variant="h4" component="h4" sx={{ fontWeight: 'bold', paddingRight: 2, marginBottom: 4 }}>
-//         All Discounted Sales
-//       </Typography>
-//       <Grid container spacing={4}>
-//         {products.map(product => (
-//           <Grid item key={product.id} xs={12} sm={6} md={3}>
-//             <Card sx={{
-//               display: 'flex',
-//               flexDirection: 'column',
-//               justifyContent: 'space-between',
-//               height: '100%',
-//               transition: 'transform 0.3s, box-shadow 0.3s',
-//               '&:hover': {
-//                 transform: 'scale(1.05)',
-//                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-//               },
-//             }}>
-//               <Box sx={{
-//                 position: 'relative',
-//                 overflow: 'hidden',
-//                 borderTopLeftRadius: 8,
-//                 borderTopRightRadius: 8,
-//               }}>
-//                 <CardMedia
-//                   component="img"
-//                   height="200"
-//                   sx={{
-//                     objectFit: 'contain',
-//                     cursor: 'pointer',
-//                     transition: 'opacity 0.2s',
-//                     '&:hover': { opacity: 0.8 },
-//                   }}
-//                   image={product.image ? `http://localhost:3333/${product.image}` : 'https://via.placeholder.com/200'}
-//                   alt={product.title}
-//                 />
-//               </Box>
-//               <CardContent sx={{
-//                 flex: '1 0 auto',
-//                 padding: 2,
-//                 display: 'flex',
-//                 flexDirection: 'column',
-//                 justifyContent: 'flex-start',
-//               }}>
-//                 <Typography 
-//                   gutterBottom 
-//                   variant="h6" 
-//                   component="div" 
-//                   sx={{ 
-//                     fontSize: '16px', 
-//                     whiteSpace: 'nowrap', 
-//                     overflow: 'hidden', 
-//                     textOverflow: 'ellipsis',
-//                   }}>
-//                   {product.title}
-//                 </Typography>
-//                 <Typography variant="h6" color="textSecondary" sx={{ fontSize: '14px' }}>
-//                   <Box component="span" sx={{ fontSize: '30px', fontWeight: 'bold' }}>
-//                     ${product.discont_price}
-//                   </Box> 
-//                   <Box component="span" sx={{ fontSize: '18px', textDecoration: 'line-through', marginLeft: 1 }}>
-//                     ${product.price}
-//                   </Box>
-//                 </Typography>
-//               </CardContent>
-//             </Card>
-//           </Grid>
-//         ))}
-//       </Grid>
-//     </Container>
-//   );
-// };
-
-// export default DiscountedSales;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

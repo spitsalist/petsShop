@@ -24,7 +24,7 @@ const OrderDetails = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:5173/products/order', orderData);
+      const response = await axios.post('http://localhost:3333/orders', orderData);
       console.log('Order response:', response.data);
       dispatch(clearCart());
       alert('Order placed successfully!');

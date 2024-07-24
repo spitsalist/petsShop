@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Typography, CircularProgress, Box } from '@mui/material';
 import CardComponent from '../components/CardComponent.jsx';
-// import SortAndFilter from '../components/SortAndFilter';
 import FilterDefinition from "../components/FilterDefinition.jsx";
+import { fetchAllProducts } from '../redux/slices/productsSlice';
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const { products, isLoading, isError, message } = useSelector((state) => state.products);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:3333/products/all')
-      .then(response => {
-        setProducts(response.data);
-        setFilteredProducts(response.data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-        setIsError(true);
-        setIsLoading(false);
-      });
-  }, []);
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
 
+  useEffect(() => {
+    setFilteredProducts(products);
+  }, [products]);
 
   if (isLoading) {
     return (
@@ -38,7 +30,7 @@ const Products = () => {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <Typography variant="h6" color="error">
-          Error loading products.
+          {message || 'Error loading products.'}
         </Typography>
       </Box>
     );
@@ -49,7 +41,7 @@ const Products = () => {
       <Typography variant="h4" component="h2" gutterBottom>
         All Products
       </Typography>
-      <FilterDefinition products={products} setFilteredProducts={setFilteredProducts}  />
+      <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} />
       <Grid container spacing={4}>
         {filteredProducts.map(product => (
           <Grid item key={product.id} xs={12} sm={6} md={3}>

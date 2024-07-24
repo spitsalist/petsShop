@@ -1,71 +1,122 @@
-import React, { useState } from 'react';
-import { Box, TextField, Checkbox, FormControlLabel, FormControl, MenuItem, Select, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-const SortAndFilter = ({ onFilterChange }) => {
-  const [priceFrom, setPriceFrom] = useState('');
-  const [priceTo, setPriceTo] = useState('');
-  const [discounted, setDiscounted] = useState(false);
-  const [sortOrder, setSortOrder] = useState('default');
+const FilterDefinition = ({ setFilteredProducts, products = [], onSale = false }) => {
+  const [sortOption, setSortOption] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [showDiscounted, setShowDiscounted] = useState(onSale);
 
-  const handlePriceFromChange = (event) => {
-    setPriceFrom(event.target.value);
-    onFilterChange({ priceFrom: event.target.value, priceTo, discounted, sortOrder });
+  useEffect(() => {
+      const applyPriceFilter = (products) => {
+          if (!Array.isArray(products)) {
+              return [];
+          }
+          return products.filter((product) => {
+              const price = product.discont_price || product.price;
+              if (minPrice && price < minPrice) return false;
+              if (maxPrice && price > maxPrice) return false;
+              if (showDiscounted && !product.discont_price) return false;
+              return true;
+          });
+      };
+
+      const sortedAndFilteredProducts = () => {
+          let filteredProducts = applyPriceFilter(products);
+          if (sortOption === 'newest') {
+              return filteredProducts.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          } else if (sortOption === 'price-high-low') {
+              return filteredProducts.slice().sort((a, b) => {
+                  const priceA = a.discont_price ? a.discont_price : a.price;
+                  const priceB = b.discont_price ? b.discont_price : b.price;
+                  return priceB - priceA;
+              });
+          } else if (sortOption === 'price-low-high') {
+              return filteredProducts.slice().sort((a, b) => {
+                  const priceA = a.discont_price ? a.discont_price : a.price;
+                  const priceB = b.discont_price ? b.discont_price : b.price;
+                  return priceA - priceB;
+              });
+          } else {
+              return filteredProducts;
+          }
+      };
+
+      setFilteredProducts(sortedAndFilteredProducts());
+  }, [products, sortOption, minPrice, maxPrice, showDiscounted, setFilteredProducts]);
+
+  const handleSortChange = (event) => {
+      setSortOption(event.target.value);
   };
 
-  const handlePriceToChange = (event) => {
-    setPriceTo(event.target.value);
-    onFilterChange({ priceFrom, priceTo: event.target.value, discounted, sortOrder });
+  const handleMinPriceChange = (event) => {
+      const value = event.target.value;
+      if (value === '' || /^[0-9]\d*$/.test(value)) {
+          setMinPrice(value);
+      }
   };
 
-  const handleDiscountedChange = (event) => {
-    setDiscounted(event.target.checked);
-    onFilterChange({ priceFrom, priceTo, discounted: event.target.checked, sortOrder });
+  const handleMaxPriceChange = (event) => {
+      const value = event.target.value;
+      if (value === '' || /^[1-9]\d*$/.test(value)) {
+          setMaxPrice(value);
+      }
   };
 
-  const handleSortOrderChange = (event) => {
-    setSortOrder(event.target.value);
-    onFilterChange({ priceFrom, priceTo, discounted, sortOrder: event.target.value });
+  const handleDiscountChange = (event) => {
+      setShowDiscounted(event.target.checked);
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 4 }}>
-      <Typography variant="body1" sx={{ mr: 2 }}>Price</Typography>
-      <TextField
-        label="from"
-        variant="outlined"
-        size="small"
-        value={priceFrom}
-        onChange={handlePriceFromChange}
-        sx={{ mr: 2 }}
-      />
-      <TextField
-        label="to"
-        variant="outlined"
-        size="small"
-        value={priceTo}
-        onChange={handlePriceToChange}
-        sx={{ mr: 4 }}
-      />
-      <FormControlLabel
-        control={<Checkbox checked={discounted} onChange={handleDiscountedChange} />}
-        label="Discounted items"
-        sx={{ mr: 4 }}
-      />
-      <Typography variant="body1" sx={{ mr: 2 }}>Sorted</Typography>
-      <FormControl variant="outlined" size="small">
-        <Select
-          value={sortOrder}
-          onChange={handleSortOrderChange}
-          displayEmpty
-        >
-          <MenuItem value="default">by default</MenuItem>
-          <MenuItem value="priceAsc">Price: Low to High</MenuItem>
-          <MenuItem value="priceDesc">Price: High to Low</MenuItem>
-          <MenuItem value="newest">Newest</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
-  );
+      <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 4 }}>
+          <Typography variant="body1" sx={{ mr: 2 }}>Price</Typography>
+          <TextField
+              label="from"
+              variant="outlined"
+              size="small"
+              value={minPrice}
+              onChange={handleMinPriceChange}
+              sx={{ mr: 2 }}
+          />
+          <TextField
+              label="to"
+              variant="outlined"
+              size="small"
+              value={maxPrice}
+              onChange={handleMaxPriceChange}
+              sx={{ mr: 4 }}
+          />
+          {!onSale && (
+              <FormControlLabel
+                  control={<Checkbox checked={showDiscounted} onChange={handleDiscountChange} />}
+                  label="Discounted items"
+                  sx={{ mr: 4 }}
+              />
+          )}
+          <Typography variant="body1" sx={{ mr: 2 }}>Sorted</Typography>
+          <FormControl variant="outlined" size="small">
+              <Select
+                  value={sortOption}
+                  onChange={handleSortChange}
+                  displayEmpty
+              >
+                  <MenuItem value="default">by default</MenuItem>
+                  <MenuItem value="priceAsc">Price: Low to High</MenuItem>
+                  <MenuItem value="priceDesc">Price: High to Low</MenuItem>
+                  <MenuItem value="newest">Newest</MenuItem>
+              </Select>
+          </FormControl>
+      </Box>
+  )
 };
 
-export default SortAndFilter;
+export default FilterDefinition;

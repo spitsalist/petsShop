@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Box, IconButton, Drawer, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { AppBar, Toolbar, Box, IconButton, Drawer, List, ListItem, ListItemText, Typography, Badge, Link as MuiLink } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/system';
 import logo from './../assets/logo.svg';
 import shoppingCart from './../assets/shopingCard.svg';
-import basketFull from './../assets/basketFull.svg';
+// import basketFull from './../assets/basketFull.svg';
 import { useSelector } from 'react-redux';
-import { Badge } from '@mui/icons-material';
+
 
 const NavList = styled('ul')(({ theme }) => ({
   display: 'flex',
@@ -22,7 +22,7 @@ const NavList = styled('ul')(({ theme }) => ({
 }));
 
 const NavItem = styled('li')(({ theme }) => ({
-  marginRight: '20px',
+  marginRight: '25px',
   [theme.breakpoints.down('md')]: {
     marginRight: 0,
     marginBottom: '10px',
@@ -74,19 +74,20 @@ const ShoppingCartIcon = styled('img')(({ theme }) => ({
   height: '48px',
   cursor: 'pointer',
   marginRight: '10px',
+  
   [theme.breakpoints.down('md')]: {
     height: '25px',
     marginRight: '10px',
   },
 }));
 
-const BasketFullIcon = styled('img')(({ theme }) => ({
-  height: '48px',
-  cursor: 'pointer',
-  [theme.breakpoints.down('md')]: {
-    height: '25px',
-  },
-}));
+// const BasketFullIcon = styled('img')(({ theme }) => ({
+//   height: '48px',
+//   cursor: 'pointer',
+//   [theme.breakpoints.down('md')]: {
+//     height: '25px',
+//   },
+// }));
 
 const Header = () => {
   const navigate = useNavigate();
@@ -102,7 +103,6 @@ const Header = () => {
 
   const drawer = (
     <Box
-      // sx={{ width: 250 }}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
@@ -121,8 +121,10 @@ const Header = () => {
           <ListItemText primary="All sales" sx={{ textTransform: 'uppercase' }} />
         </ListItem>
         <ListItem sx={{ justifyContent: 'flex-end' }}>
-          <IconButton edge="end" color="inherit">
-            <BasketFullIcon src={basketFull} alt="Basket Full" />
+          <IconButton edge="end" color="inherit" onClick={() => navigate('/cart')}>
+                    <Badge  badgeContent={cartItems.length} color="error" >
+            <ShoppingCartIcon src={shoppingCart} alt="Shopping cart" />
+          </Badge>
           </IconButton>
         </ListItem>
       </List>
@@ -132,8 +134,8 @@ const Header = () => {
   return (
     <AppBar position="static" sx={{ justifyContent: 'space-between', backgroundColor: 'white', color: 'black', boxShadow: 'none', borderBottom: '1px solid #DDDDDD' }}>
       <Toolbar disableGutters sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center'}}>
-        <RouterLink to="/">
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <RouterLink to="/">
             <Logo src={logo} alt="Logo" />
           </RouterLink>
         </Box>
@@ -173,13 +175,11 @@ const Header = () => {
           </NavList>
         </Box>
 
-        <IconButton edge="end" color="inherit" onClick={() => navigate('/cart')} sx={{ display: { xs: 'none', md: 'block' } }}>
-          <Badge src={shoppingCart} alt="Shopping cart" />
-          <Typography variant="body1" sx={{ fontSize: '14px', position: 'absolute', top: '-10px', right: '-10px', backgroundColor: 'red', color: 'white', borderRadius: '50%', padding: '2px 6px' }}>
-            {cartItems.length}
-          </Typography>
+        <IconButton edge="end" color="inherit" onClick={() => navigate('/cart')} sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Badge badgeContent={cartItems.length} color="error">
+            <ShoppingCartIcon src={shoppingCart} alt="Shopping cart" />
+          </Badge>
         </IconButton>
-
       </Toolbar>
     </AppBar>
   );
