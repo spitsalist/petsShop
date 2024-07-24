@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container, Grid, Typography, CircularProgress, Box } from '@mui/material';
+import { Grid, Typography, CircularProgress, Box } from '@mui/material';
 import CardComponent from '../components/CardComponent.jsx';
 import FilterDefinition from "../components/FilterDefinition.jsx";
 import { fetchAllProducts } from '../redux/slices/productsSlice';

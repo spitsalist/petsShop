@@ -471,10 +471,26 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, incrementQuantity, decrementQuantity } from '../redux/slices/cartSlice';
 import { saleRequestSend } from '../redux/slices/saleRequestSlice';
-import { Container, Grid, Card, CardContent, CardMedia, Typography, Button, Box, TextField, CircularProgress, Alert } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  Box,
+  TextField,
+  CircularProgress,
+  Alert,
+  useMediaQuery
+} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from '@mui/material/styles/styled';
 import { Divider } from '@mui/material';
+import VerticalTitle from "../components/VerticalTitle.jsx";
+import TitleDivider from "../components/TitleDivider.jsx";
+import theme from "../theme.js";
 
 const calculateDiscount = (originalPrice, discountPrice) => {
   if (!originalPrice || !discountPrice || originalPrice <= discountPrice) return 0;
@@ -526,25 +542,12 @@ const Cart = () => {
 
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  console.log(isSmallScreen)
 
   return (
     <Box sx={{ my: 6 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-          Shopping Cart
-        </Typography>
-        <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', mx: 2 }}>
-          <Divider orientation="horizontal" flexItem sx={{ width: '100%' }} />
-        </Box>
-        <Button
-          variant="outlined"
-          component={RouterLink}
-          to="/sales/all"
-          sx={{ color: '#8B8B8B', fontSize: '14px' }}
-        >
-          Back to the store
-        </Button>
-      </Box>
+      <TitleDivider title="Shopping Cart" buttonTitle="Back to the store" buttonPath="/sales/all" />
       {cartItems.length === 0 ? (
         <Typography variant="h6" component="div">
           Your cart is empty.
@@ -557,7 +560,7 @@ const Cart = () => {
               const itemOriginalTotalPrice = item.originalPrice ? item.originalPrice * item.quantity : null;
 
               return (
-                <Card key={item.id} sx={{ display: 'flex', mb: 2, p: 2 }}>
+                <Card key={item.id} sx={{ display: 'flex', mb: 2, p: 2, flexDirection: { xs: 'column', md: 'row' } }}>
                   <CardMedia
                     component="img"
                     sx={{ width: 200, transition: 'transform 0.3s ease', ":hover": { transform: 'scale(1.05)', opacity: 0.8 } }}
@@ -580,17 +583,21 @@ const Cart = () => {
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', borderRadius: '4px', p: 1 }}>
-                        <Button variant="outlined" sx={{ borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc' }} onClick={() => handleDecrementQuantity(item.id)}>-</Button>
+                        <Button variant="outlined" sx={{ borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', minWidth: { xs: '20px', md: '64px' }}} onClick={() => handleDecrementQuantity(item.id)}>-</Button>
                         <Typography variant="body1" sx={{ mx: 3, fontWeight: 'bold' }}>{item.quantity}</Typography>
-                        <Button variant="outlined" sx={{ borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc' }} onClick={() => handleIncrementQuantity(item.id)}>+</Button>
+                        <Button variant="outlined" sx={{ borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', minWidth: { xs: '20px', md: '64px' } }} onClick={() => handleIncrementQuantity(item.id)}>+</Button>
                       </Box>
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                         {item.originalPrice && item.price < item.originalPrice ? (
                           <>
-                            <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+                            <Typography
+                                variant={isSmallScreen ? "body2" : "h4"}
+                                sx={{ fontWeight: 'bold', textAlign: 'left' }}>
                               ${itemTotalPrice.toFixed(2)}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{ textDecoration: 'line-through', textAlign: 'left' }}>
+                            <Typography
+                                variant={isSmallScreen ? "body2" : "h4"}
+                                color="textSecondary" sx={{ textDecoration: 'line-through', textAlign: 'left' }}>
                               ${itemOriginalTotalPrice.toFixed(2)}
                             </Typography>
                             <Typography variant="body2" sx={{ color: 'green', textAlign: 'left' }}>
@@ -598,7 +605,9 @@ const Cart = () => {
                             </Typography>
                           </>
                         ) : (
-                          <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+                          <Typography
+                              variant={isSmallScreen ? "h6" : "h4"}
+                              sx={{ fontWeight: 'bold', textAlign: 'left' }}>
                             ${itemTotalPrice.toFixed(2)}
                           </Typography>
                         )}
