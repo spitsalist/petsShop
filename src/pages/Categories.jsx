@@ -3,21 +3,10 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllCategories } from '../redux/slices/categoriesSlice';
 import { Typography, Grid, Card, CardMedia, Box, Divider, Button, Breadcrumbs, Link } from '@mui/material';
-import { styled } from "@mui/system";
+import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
+import TitleDivider from "../components/TitleDivider.jsx";
+import VerticalTitle from "../components/VerticalTitle.jsx";
 
-const HeaderBox = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(4),
-}));
-
-const DividerBox = styled(Box)(({ theme }) => ({
-    flexGrow: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
 
 const Categories = ({ home = false }) => {
     const dispatch = useDispatch();
@@ -27,31 +16,24 @@ const Categories = ({ home = false }) => {
         dispatch(fetchAllCategories());
     }, [dispatch]);
 
+    const breadcrumbs = [
+        { path: '/', title: 'Main page' },
+        { path: '/categories', title: 'All categories' },
+        ];
+
     return (
         <>
-            {!home && (
-                <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
-                    <Link underline="hover" color="inherit" component={RouterLink} to="/">
-                        Main page
-                    </Link>
-                    <Link underline="hover" color="inherit" component={RouterLink} to="/categories">
-                        All categories
-                    </Link>
-                </Breadcrumbs>
-            )}
-            <HeaderBox>
-                 
-                 
-               
-                <Typography variant="h4" component="h4" sx={{ fontWeight: 'bold' }}>
-                    Categories
-                </Typography>
-                <DividerBox>
-                    <Divider orientation="horizontal" flexItem sx={{ mx: 2 }} />
-                </DividerBox>
-                <Button variant="outlined" component={RouterLink} to="/categories">All categories</Button>
 
-            </HeaderBox>
+            {home ? (
+                <TitleDivider title="Categories" buttonTitle="All Categories" buttonPath="/categories" />
+            ): (
+                <>
+                <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
+                <VerticalTitle title="Categories" />
+                </>
+            )
+            }
+
             <Box sx={{ mt: 6 }}>
                 <Grid container spacing={4}>
                     {categories?.map(category => (
@@ -60,7 +42,6 @@ const Categories = ({ home = false }) => {
                                 <RouterLink to={`/categories/${category.id}`} style={{ textDecoration: 'none' }}>
                                     <CardMedia
                                         component="img"
-                                        height="280"
                                         sx={{
                                             objectFit: 'contain',
                                             opacity: 1,

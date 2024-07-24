@@ -5,23 +5,10 @@ import { Link as RouterLink } from 'react-router-dom';
 import CardComponent from "../components/CardComponent.jsx";
 import FilterDefinition from "../components/FilterDefinition.jsx";
 import { fetchAllProducts } from '../redux/slices/productsSlice';
-import { styled } from '@mui/system';
+import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
+import TitleDivider from "../components/TitleDivider.jsx";
+import VerticalTitle from "../components/VerticalTitle.jsx";
 
-const HeaderBox = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginBottom: theme.spacing(4),
-}));
-
-const DividerBox = styled(Box)(({ theme }) => ({
-  flexGrow: 1,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  margin: theme.spacing(0, 2),
-}));
 
 const Sales = ({ home = false }) => {
   const dispatch = useDispatch();
@@ -58,47 +45,24 @@ const Sales = ({ home = false }) => {
     );
   }
 
+  const breadcrumbs = [
+    { path: '/', title: 'Main page' },
+    { path: '/sales/all', title: 'All Sales' },
+  ]
+
   return (
     <Box sx={{ mt: 6 }}>
       {!home && (
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" component={RouterLink} to="/">
-            Main page
-          </Link>
-          <Link underline="hover" color="inherit" component={RouterLink} to="/sales/all">
-            All Sales
-          </Link>
-        </Breadcrumbs>
+        <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
       )}
 
-      <HeaderBox>
-        <Typography variant="h4" component="h2" sx={{ whiteSpace: 'nowrap', mt: 5, fontWeight: 'bold' }}>
-          {home ? 'Sales' : 'Discounted Item'}
-        </Typography>
-        <DividerBox>
-          <Divider orientation="horizontal" flexItem sx={{ width: '100%', mt: 5 }} />
-        </DividerBox>
-        {home && (
-          <Button
-            sx={{
-              textTransform: 'none',
-              width: 'auto',
-              height: '36px',
-              textAlign: 'center',
-              padding: '0 16px',
-              whiteSpace: 'nowrap',
-              mt: 5,
 
-              
-            }}
-            variant="outlined"
-            component={RouterLink}
-            to="/sales/all"
-          >
-            All sales
-          </Button>
-        )}
-      </HeaderBox>
+      {home ? (
+          <TitleDivider title="Sales" buttonTitle="All Sales" buttonPath="/sales/all" />
+      ): (
+        <VerticalTitle title="Discounted Items" />
+        )
+      }
 
       {!home && (
         <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} onSale />

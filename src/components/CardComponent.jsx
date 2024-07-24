@@ -72,7 +72,7 @@ const CardComponent = ({ product }) => {
                 <CardMedia
                     component="img"
                     sx={{
-                        height: '200px',
+                        height: '280px',
                         objectFit: 'contain',
                         opacity: 1,
                         '&:hover': { opacity: 0.9 }
@@ -90,7 +90,7 @@ const CardComponent = ({ product }) => {
                         justifyContent: 'center',
                         padding: '10px',
                         // backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                        backgroundColor: 'black',
+                        // backgroundColor: 'black',
                     }}>
                         {isInCart(product.id) ? (
                             <Button
@@ -100,9 +100,11 @@ const CardComponent = ({ product }) => {
                                 sx={{
                                     width: '100%',
                                     color: 'white',
-                                    borderColor: 'white',
+                                    borderColor: 'black',
+                                    backgroundColor: 'black',
                                     '&:hover': {
-                                        // backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                        backgroundColor: 'gray',
+                                        borderColor: 'gray',
                                     }
                                 }}
                             >

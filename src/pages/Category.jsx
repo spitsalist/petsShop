@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import CardComponent from '../components/CardComponent.jsx';
 import FilterDefinition from '../components/FilterDefinition.jsx';
+import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
 
 const Category = () => {
   const { categoryId } = useParams();
@@ -55,17 +56,15 @@ const Category = () => {
     );
   }
 
+  const breadcrumbs = [
+    { path: '/', title: 'Main page' },
+    { path: '/categories', title: 'Categories' },
+    { path: `/categories/${categoryId}`, title: categoryData?.category?.title },
+    ];
+
   return (
     <>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" component={RouterLink} to="/">
-          Main page
-        </Link>
-        <Link underline="hover" color="inherit" component={RouterLink} to="/categories">
-          Categories
-        </Link>
-        <Typography color="textPrimary">{categoryData?.category?.title}</Typography>
-      </Breadcrumbs>
+      <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
       <Container sx={{ mt: 6 }}>
         <Typography variant="h4" component="h2" gutterBottom>
           {categoryData?.category?.title}

@@ -4,6 +4,8 @@ import { Container, Grid, Typography, CircularProgress, Box } from '@mui/materia
 import CardComponent from '../components/CardComponent.jsx';
 import FilterDefinition from "../components/FilterDefinition.jsx";
 import { fetchAllProducts } from '../redux/slices/productsSlice';
+import VerticalTitle from "../components/VerticalTitle.jsx";
+import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -36,11 +38,15 @@ const Products = () => {
     );
   }
 
+  const breadcrumbs = [
+      { path: '/', title: 'Main page' },
+      { path: '/products', title: 'All products' },
+  ]
+
   return (
-    <Container sx={{ mt: 6 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        All Products
-      </Typography>
+    <Box sx={{ mt: 6 }}>
+        <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
+        <VerticalTitle title="All Products" />
       <FilterDefinition products={products} setFilteredProducts={setFilteredProducts} />
       <Grid container spacing={4}>
         {filteredProducts.map(product => (
@@ -49,7 +55,7 @@ const Products = () => {
           </Grid>
         ))}
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

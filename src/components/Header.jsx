@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Box, IconButton, Drawer, List, ListItem, ListItemText, Typography, Badge, Link as MuiLink } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  Badge,
+  Link as MuiLink,
+  Divider
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/system';
@@ -93,6 +106,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.items);
+  const isHomePath = window.location.pathname === '/';
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -132,7 +146,8 @@ const Header = () => {
   );
 
   return (
-    <AppBar position="static" sx={{ justifyContent: 'space-between', backgroundColor: 'white', color: 'black', boxShadow: 'none', borderBottom: '1px solid #DDDDDD' }}>
+      <>
+    <AppBar position="static" sx={{ justifyContent: 'space-between', backgroundColor: 'white', color: 'black', boxShadow: 'none' }}>
       <Toolbar disableGutters sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <RouterLink to="/">
@@ -182,6 +197,8 @@ const Header = () => {
         </IconButton>
       </Toolbar>
     </AppBar>
+        <Divider sx={{ margin: '20px -40px', marginBottom: isHomePath ? '0' : '20px' }} />
+      </>
   );
 };
 

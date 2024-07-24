@@ -5,7 +5,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 const Footer = () => {
   return (
     <Box sx={{ bgcolor: 'background.paper'}} component="footer">
-      <Box maxWidth="lg">
+      <Box>
         <Typography variant="h4" align="left" gutterBottom>
           Contact
         </Typography>

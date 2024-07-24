@@ -5,6 +5,7 @@ import { Container, Grid, CardMedia, Box, Typography, Button, IconButton, Circul
 import { Add, Remove } from '@mui/icons-material';
 import { fetchProductById } from '../redux/slices/productsSlice';
 import { addToCart } from '../redux/slices/cartSlice';
+import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
 
 const ProductPage = () => {
   const { productId } = useParams();
@@ -55,20 +56,16 @@ const ProductPage = () => {
     );
   }
 
+  const breadcrumbs = [
+    { path: '/', title: 'Main page' },
+    { path: '/categories', title: 'Categories' },
+    { path: `/categories/${productData.categoryId}`, title: 'Discounted item' },
+    { path: `/product/${productId}`, title: productData.title },
+    ];
+
   return (
     <Container sx={{ mt: 4 }}>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          Main page
-        </Link>
-        <Link underline="hover" color="inherit" href="/categories/">
-          Categories
-        </Link>
-        <Link underline="hover" color="inherit" href={`/categories/${productData.categoryId}`}>
-          Discounted item
-        </Link>
-        <Typography color="text.primary">{productData.title}</Typography>
-      </Breadcrumbs>
+      <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
 
       <Grid container spacing={4} sx={{ mt: 2 }}>
         <Grid item xs={12} md={5}>
