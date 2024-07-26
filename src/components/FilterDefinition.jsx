@@ -39,13 +39,13 @@ const FilterDefinition = ({
         return filteredProducts
           .slice()
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      } else if (sortOption === "price-high-low") {
+      } else if (sortOption === "priceDesc") {
         return filteredProducts.slice().sort((a, b) => {
           const priceA = a.discont_price ? a.discont_price : a.price;
           const priceB = b.discont_price ? b.discont_price : b.price;
           return priceB - priceA;
         });
-      } else if (sortOption === "price-low-high") {
+      } else if (sortOption === "priceAsc") {
         return filteredProducts.slice().sort((a, b) => {
           const priceA = a.discont_price ? a.discont_price : a.price;
           const priceB = b.discont_price ? b.discont_price : b.price;
