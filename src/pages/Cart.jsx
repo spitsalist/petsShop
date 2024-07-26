@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, incrementQuantity, decrementQuantity } from '../redux/slices/cartSlice';
 import { saleRequestSend} from '../redux/slices/saleRequestSlice';
@@ -245,7 +245,6 @@ const Cart = () => {
               </form>
               {isError && <Alert severity="error">{message}</Alert>}
               <DialogWindow
-                
                 open={open}
                 handleClose={handleClose}
                 WindowText={"Your order has been successfully placed on the website. A manager will contact you shortly."}
