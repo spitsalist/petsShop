@@ -78,7 +78,7 @@ const CardComponent = ({ product }) => {
                         opacity: 1,
                         '&:hover': { opacity: 0.9 }
                     }}
-                    image={product.image ? `http://localhost:3333/${product.image}` : 'https://via.placeholder.com/200'}
+                    image={product.image ? `http://localhost:3333/${product.image}` : 'product pets'}
                     alt={product.title}
                 />
                 {isHovered && (
@@ -90,8 +90,7 @@ const CardComponent = ({ product }) => {
                         display: 'flex',
                         justifyContent: 'center',
                         padding: '10px',
-                        // backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                        // backgroundColor: 'black',
+
                     }}>
                         {isInCart(product.id) ? (
                             <Button
@@ -118,13 +117,11 @@ const CardComponent = ({ product }) => {
                                 variant="contained"
                                 sx={{
                                     width: '100%',
-                                    // backgroundColor: 'secondary.main',
                                     '&:hover': {
-                                        // backgroundColor: 'primary.dark',
                                     }
                                 }}
                             >
-                                Add to Cart
+                                Add to Card
                             </Button>
                         )}
                     </Box>

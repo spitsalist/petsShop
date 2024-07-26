@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3333/categories';
 
-// Fetch all categories
 export const fetchAllCategories = createAsyncThunk(
     'categories/fetchAll',
     async (_, thunkApi) => {
@@ -17,7 +16,6 @@ export const fetchAllCategories = createAsyncThunk(
     }
 );
 
-// Fetch category by ID
 export const fetchCategoryById = createAsyncThunk(
     'categories/id',
     async (categoryId, thunkApi) => {

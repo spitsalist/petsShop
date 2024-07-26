@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container, Grid, CardMedia, Box, Typography, Button, IconButton, CircularProgress, Breadcrumbs, Link, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import {  Grid, CardMedia, Box, Typography, Button, IconButton, CircularProgress,  } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import { fetchProductById } from '../redux/slices/productsSlice';
 import { addToCart } from '../redux/slices/cartSlice';
@@ -61,10 +61,10 @@ const ProductPage = () => {
     { path: '/categories', title: 'Categories' },
     { path: `/categories/${productData.categoryId}`, title: 'Discounted item' },
     { path: `/product/${productId}`, title: productData.title },
-    ];
+  ];
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Box sx={{ mt: 4, mb: 4 }}>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
 
       <Grid container spacing={4} sx={{ mt: 2 }}>
@@ -111,36 +111,23 @@ const ProductPage = () => {
               <IconButton sx={{ border: '1px solid #ccc', borderRadius: '4px', width: '65px', height: '35px' }} onClick={handleIncrease} size="small">
                 <Add />
               </IconButton>
-              <Button variant="contained" color="primary" sx={{ height: '40px', width: '270px', backgroundColor: '#0D50FF', fontWeight: 'bold', marginLeft: 'auto' }} onClick={handleAddToCart}>
+              <Button variant="contained" color="primary" sx={{ height: '40px', width: '230px', backgroundColor: '#0D50FF', fontWeight: 'bold', marginLeft: 'auto', fontSize: { xs: '14px', sm: '16px', md: '18px', lg: '20px' } }} onClick={handleAddToCart}>
                 Add to cart
               </Button>
             </Box>
             <Typography variant="h6" gutterBottom>
               Description
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: '100px' }}>
+            <Typography variant="body1" color="text.secondary" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: readMore ? 'none' : '100px', whiteSpace: readMore ? 'normal' : 'nowrap' }}>
               {productData.discont_description || productData.description}
             </Typography>
-            <Typography onClick={() => setReadMore(true)} sx={{ mt: 2, textAlign: 'right', cursor: 'pointer', ":hover": { textDecoration: 'underline', color: '#0D50FF' } }}>
-              Read More
+            <Typography onClick={() => setReadMore(!readMore)} sx={{ mt: 2, textAlign: 'right', cursor: 'pointer', ":hover": { textDecoration: 'underline', color: '#0D50FF' } }}>
+              {readMore ? 'Show Less' : 'Read More'}
             </Typography>
-            <Dialog open={readMore} onClose={() => setReadMore(false)} aria-labelledby="read-more-dialog-title" aria-describedby="read-more-dialog-description">
-              <DialogTitle id="read-more-dialog-title">Description</DialogTitle>
-              <DialogContent dividers>
-                <DialogContentText id="read-more-dialog-description" tabIndex={-1}>
-                  {productData.discont_description || productData.description}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setReadMore(false)} color="primary">
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
           </Box>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

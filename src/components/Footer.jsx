@@ -1,27 +1,25 @@
-import { Container, Box, Typography, Grid, IconButton } from '@mui/material';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import { Box, Typography, Grid, IconButton } from "@mui/material";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 const Footer = () => {
   return (
-    <Box sx={{ bgcolor: 'background.paper'}} component="footer">
+    <Box sx={{ bgcolor: "background.paper" }} component="footer">
       <Box>
         <Typography variant="h4" align="left" gutterBottom>
           Contact
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 2 }}>
+            <Box sx={{ p: 2, bgcolor: "grey.100", borderRadius: 2 }}>
               <Typography variant="subtitle2" color="textSecondary">
                 Phone
               </Typography>
-              <Typography variant="h6">
-                +49 30 915-88492
-              </Typography>
+              <Typography variant="h6">+49 30 915-88492</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 2 }}>
+            <Box sx={{ p: 2, bgcolor: "grey.100", borderRadius: 2 }}>
               <Typography variant="subtitle2" color="textSecondary">
                 Socials
               </Typography>
@@ -36,7 +34,7 @@ const Footer = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={8}>
-            <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 2 }}>
+            <Box sx={{ p: 2, bgcolor: "grey.100", borderRadius: 2 }}>
               <Typography variant="subtitle2" color="textSecondary">
                 Address
               </Typography>
@@ -46,13 +44,11 @@ const Footer = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 2 }}>
+            <Box sx={{ p: 2, bgcolor: "grey.100", borderRadius: 2 }}>
               <Typography variant="subtitle2" color="textSecondary">
                 Working Hours
               </Typography>
-              <Typography variant="h6">
-                24 hours a day
-              </Typography>
+              <Typography variant="h6">24 hours a day</Typography>
             </Box>
           </Grid>
         </Grid>

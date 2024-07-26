@@ -245,7 +245,7 @@ const Cart = () => {
               </form>
               {isError && <Alert severity="error">{message}</Alert>}
               <DialogWindow
-              onClick={setOpen}
+                
                 open={open}
                 handleClose={handleClose}
                 WindowText={"Your order has been successfully placed on the website. A manager will contact you shortly."}

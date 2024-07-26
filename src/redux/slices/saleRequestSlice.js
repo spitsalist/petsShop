@@ -1,6 +1,6 @@
-// redux/slices/requestSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { clearCart } from './cartSlice'; 
 
 const API_URL = 'http://localhost:3333/sale/send';
 
@@ -9,6 +9,7 @@ export const saleRequestSend = createAsyncThunk(
   async (clientData, thunkAPI) => {
     try {
       const response = await axios.post(API_URL, clientData);
+      thunkAPI.dispatch(clearCart()); 
       return response.data;
     } catch (error) {
       const message = error.response.data.message;

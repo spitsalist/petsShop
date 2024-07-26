@@ -1,5 +1,4 @@
 import {  Box } from '@mui/material';
-// import { styled } from '@mui/system';
 import Categories from './Categories';
 import DiscountForm from './../components/DiscountForm';
 import Sales from './../pages/Sales';

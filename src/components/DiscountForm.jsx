@@ -1,4 +1,3 @@
-import React from 'react';
 import {  Box, Typography, TextField, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import { useForm, Controller } from 'react-hook-form';
@@ -17,7 +16,9 @@ const DiscountSection = styled(Box)(({ theme }) => ({
   margin: 'auto',
   position: 'relative',
   opacity: 1,
-  // padding: theme.spacing(3),
+  padding: 0,
+ 
+  
 }));
 
 const FormBox = styled(Box)(({ theme }) => ({
@@ -25,12 +26,12 @@ const FormBox = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   gap: '12px',
   width: '100%',
-  maxWidth: '450px',
   borderRadius: '16px',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
   padding: theme.spacing(3),
+
 }));
 
 const ContentBox = styled(Box)(({ theme }) => ({
@@ -44,6 +45,7 @@ const ContentBox = styled(Box)(({ theme }) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+
 }));
 
 const PetImageBox = styled(Box)(({ theme }) => ({
@@ -82,7 +84,7 @@ const DiscountForm = () => {
             fontSize: '54px',
             marginTop: '20px',
             '@media (max-width:600px)': {
-              fontSize: '32px',
+              fontSize: '26px',
             },
           }}
         >
@@ -128,6 +130,11 @@ const DiscountForm = () => {
                         borderColor: 'white',
                       },
                     },
+                    '@media (max-width:600px)': {
+                      fontSize: '14px',
+                      width: '80%',
+                    
+                    },
                   }}
                 />
               )}
@@ -161,6 +168,11 @@ const DiscountForm = () => {
                       '&.Mui-focused fieldset': {
                         borderColor: 'white',
                       },
+                    },
+                    '@media (max-width:600px)': {
+                      fontSize: '14px',
+                      width: '80%',
+                    
                     },
                   }}
                 />
@@ -196,6 +208,11 @@ const DiscountForm = () => {
                         borderColor: 'white',
                       },
                     },
+                    '@media (max-width:600px)': {
+                      fontSize: '14px',
+                      width: '80%',
+                    
+                    },
                   }}
                 />
               )}
@@ -210,8 +227,15 @@ const DiscountForm = () => {
                 width: '100%',
                 borderRadius: '8px',
                 textTransform: 'none',
+                
                 '&:hover': {
                   backgroundColor: '#fff',
+                },
+
+                '@media (max-width:600px)': {
+                  padding: '8px 20px',
+                  fontSize: '14px',
+                  width: '80%',
                 },
               }}
             >

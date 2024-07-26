@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategoryById } from './../redux/slices/categoriesSlice.js';
 import {
@@ -8,8 +8,6 @@ import {
   Grid,
   CircularProgress,
   Box,
-  Breadcrumbs,
-  Link,
 } from '@mui/material';
 import CardComponent from '../components/CardComponent.jsx';
 import FilterDefinition from '../components/FilterDefinition.jsx';
