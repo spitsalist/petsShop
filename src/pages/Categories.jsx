@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllCategories } from "../redux/slices/categoriesSlice";
@@ -35,10 +35,10 @@ const Categories = ({ home = false }) => {
         </>
       )}
 
-      <Box sx={{ mt: 6 }}>
-        <Grid container spacing={4}>
+      <Box sx={{ mt: 6, display: "flex", justifyContent: "center" }}>
+        <Grid container spacing={2} sx={{ maxWidth: "1200px" }}>
           {categories?.map((category) => (
-            <Grid item key={category.id} xs={12} sm={6} md={3}>
+            <Grid item key={category.id} xs={11} sm={6} md={4} lg={3}>
               <Card
                 sx={{
                   background: "none",

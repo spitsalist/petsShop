@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Grid, Typography, CircularProgress, Box } from "@mui/material";
 import CardComponent from "../components/CardComponent.jsx";
@@ -64,8 +64,8 @@ const Sales = ({ home = false }) => {
   ];
 
   return (
-    <Box sx={{ mt: 6, }}>
-      {!home && <BreadcrumbsComponent breadcrumbs={breadcrumbs}  />}
+    <Box sx={{ mt: 6 }}>
+      {!home && <BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
 
       {home ? (
         <TitleDivider
@@ -85,7 +85,7 @@ const Sales = ({ home = false }) => {
         />
       )}
 
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         {filteredProducts.map((product) => (
           <Grid item key={product.id} xs={12} sm={6} md={3}>
             <CardComponent product={product} />

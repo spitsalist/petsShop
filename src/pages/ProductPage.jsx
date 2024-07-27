@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {  Grid, CardMedia, Box, Typography, Button, IconButton, CircularProgress,  } from '@mui/material';
@@ -38,7 +38,7 @@ const ProductPage = () => {
 
   if (isError) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box display="flex" justifyContent="center" alignItems="center" >
         <Typography variant="h6" color="error">
           {message || 'Error loading product data.'}
         </Typography>
@@ -48,7 +48,7 @@ const ProductPage = () => {
 
   if (!productData) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box display="flex" justifyContent="center" alignItems="center" >
         <Typography variant="h6" color="error">
           Product data is empty.
         </Typography>
@@ -67,7 +67,7 @@ const ProductPage = () => {
     <Box sx={{ mt: 4, mb: 4 }}>
       <BreadcrumbsComponent breadcrumbs={breadcrumbs} />
 
-      <Grid container spacing={4} sx={{ mt: 2 }}>
+      <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={12} md={5}>
           <Box>
             <CardMedia
