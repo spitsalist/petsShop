@@ -8,13 +8,18 @@ import {
   DialogContentText,
 } from "@mui/material";
 
-const DialogWindow = ({ open, handleClose, WindowText }) => {
+const DialogWindow = ({
+  open,
+  handleClose,
+  WindowText = "Your order has been successfully placed on the website. A manager will contact you shortly.",
+}) => {
   const dialogStyles = {
     backgroundColor: "rgba(13, 80, 255, 1)",
     color: "rgba(255, 255, 255, 1)",
+    
+    
   };
 
-  console.log(open);
   return (
     <Dialog
       open={open}
@@ -24,6 +29,7 @@ const DialogWindow = ({ open, handleClose, WindowText }) => {
     >
       <Box
         sx={{
+
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllCategories } from "../redux/slices/categoriesSlice";
+import { fetchAllCategories } from '../redux/slices/categoriesSlice.js';
 import { Typography, Grid, Card, CardMedia, Box } from "@mui/material";
-import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
-import TitleDivider from "../components/TitleDivider.jsx";
-import VerticalTitle from "../components/VerticalTitle.jsx";
+import BreadcrumbsComponent from '../components/Breadcrumbs/BreadcrumbsComponent.jsx';
+import TitleDivider from './../components/TitleDivider.jsx';
+import VerticalTitle from '../components/VerticalTitle.jsx';
 
 const Categories = ({ home = false }) => {
   const dispatch = useDispatch();

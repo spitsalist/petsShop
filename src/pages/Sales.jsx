@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Grid, Typography, CircularProgress, Box } from "@mui/material";
-import CardComponent from "../components/CardComponent.jsx";
-import FilterDefinition from "../components/FilterDefinition.jsx";
+import CardComponent from '../components/CardComponent/CardComponent.jsx';
+import FilterDefinition from '../components/FilterDefinition/FilterDefinition.jsx';
 import { fetchAllProducts } from "../redux/slices/productsSlice";
-import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
+import BreadcrumbsComponent from '../components/Breadcrumbs/BreadcrumbsComponent.jsx';
 import TitleDivider from "../components/TitleDivider.jsx";
-import VerticalTitle from "../components/VerticalTitle.jsx";
+import VerticalTitle from '../components/VerticalTitle.jsx';
 
 const Sales = ({ home = false }) => {
   const dispatch = useDispatch();

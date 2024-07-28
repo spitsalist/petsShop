@@ -4,17 +4,15 @@ import {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
-} from "../redux/slices/cartSlice";
-import { saleRequestSend } from "../redux/slices/saleRequestSlice";
+} from "../../redux/slices/cartSlice.js";
+import { saleRequestSend } from "../../redux/slices/saleRequestSlice.js";
 import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
   Typography,
   Button,
   Box,
-  TextField,
   CircularProgress,
   Alert,
   useMediaQuery,
@@ -22,10 +20,19 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { Link as RouterLink } from "react-router-dom";
-import TitleDivider from "../components/TitleDivider.jsx";
-import theme from "../theme.js";
+import TitleDivider from "../TitleDivider.jsx";
+import theme from "../../theme.js";
 import { Add, Remove } from "@mui/icons-material";
-import DialogWindow from "../components/DialogWindow";
+import DialogWindow from "../DialogWindow/DialogWindow.jsx";
+import {
+  CartContainer,
+  CustomCardMedia,
+  QuantityControlBox,
+  QuantityTypography,
+  OrderDetailsBox,
+  CustomTextField,
+  CustomButton,
+} from "./CartStyles";
 
 const calculateDiscount = (originalPrice, discountPrice) => {
   if (!originalPrice || !discountPrice || originalPrice <= discountPrice)
@@ -39,14 +46,15 @@ const Cart = () => {
   const { isLoading, isError, message } = useSelector(
     (state) => state.saleRequest
   );
-
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const {
     control,
+    handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
   const [open, setOpen] = useState(false);
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const handleRemoveFromCart = (id) => {
     dispatch(removeFromCart(id));
@@ -60,26 +68,27 @@ const Cart = () => {
     dispatch(decrementQuantity(id));
   };
 
-  const onSubmit = (e, data) => {
-    e.preventDefault();
-    const orderDetails = {
-      customerDetails: data,
-      items: cartItems,
-      totalAmount: totalAmount,
-    };
+  const onSubmit = (data) => {
+    setFormSubmitted(true);
+    if (isValid) {
+      const orderDetails = {
+        customerDetails: data,
+        items: cartItems,
+        totalAmount: totalAmount,
+      };
 
-    dispatch(saleRequestSend(orderDetails));
-    setOpen(true);
-    localStorage.clear(reset());
-  };
-  const pageReload = () => {
-    window.location.reload();
+      dispatch(saleRequestSend(orderDetails));
+      setOpen(true);
+      localStorage.clear();
+      reset();
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
-    localStorage.clear(reset());
-    pageReload();
+    localStorage.clear();
+    reset();
+    window.location.reload();
   };
 
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -88,9 +97,8 @@ const Cart = () => {
     0
   );
 
-  
   return (
-    <Box sx={{ my: 6 }}>
+    <CartContainer>
       <TitleDivider
         title="Shopping Cart"
         buttonTitle="Back to the store"
@@ -102,7 +110,12 @@ const Cart = () => {
         </Typography>
       ) : (
         <Grid container spacing={2}>
-          <Grid item xs={12} md={8}>
+          <Grid
+            item
+            xs={12}
+            md={8}
+            sx={{ display: "flex", flexDirection: "column" }}
+          >
             {cartItems.map((item) => {
               const itemTotalPrice = item.price * item.quantity;
               const itemOriginalTotalPrice = item.originalPrice
@@ -118,15 +131,8 @@ const Cart = () => {
                     flexDirection: { xs: "column", md: "row" },
                   }}
                 >
-                  <CardMedia
+                  <CustomCardMedia
                     component="img"
-                    sx={{
-                      width: "200px",
-                      height: "200px",
-                      objectFit: "contain",
-                      transition: "transform 0.3s ease",
-                      ":hover": { transform: "scale(1.05)", opacity: 0.8 },
-                    }}
                     image={
                       item.image
                         ? `http://localhost:3333/${item.image}`
@@ -142,7 +148,6 @@ const Cart = () => {
                         variant="h6"
                         sx={{
                           fontFamily: "Montserrat",
-                          fontSize: "17px",
                           textAlign: "left",
                         }}
                       >
@@ -172,13 +177,7 @@ const Cart = () => {
                         mt: 2,
                       }}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          mb: isSmallScreen ? 1 : 0,
-                        }}
-                      >
+                      <QuantityControlBox>
                         <IconButton
                           variant="outlined"
                           sx={{
@@ -191,22 +190,9 @@ const Cart = () => {
                         >
                           <Remove />
                         </IconButton>
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            border: "1px solid #ccc",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            width: "80px",
-                            height: "37px",
-                            textAlign: "center",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+                        <QuantityTypography variant="body1">
                           {item.quantity}
-                        </Typography>
+                        </QuantityTypography>
                         <IconButton
                           variant="outlined"
                           sx={{
@@ -219,7 +205,7 @@ const Cart = () => {
                         >
                           <Add />
                         </IconButton>
-                      </Box>
+                      </QuantityControlBox>
                       <Box
                         sx={{
                           display: "flex",
@@ -267,18 +253,8 @@ const Cart = () => {
               );
             })}
           </Grid>
-          <Grid item xs={12} md={4} >
-            <Box
-              sx={{
-                position: "sticky",
-                top: 0,
-                p: 2,
-                backgroundColor: "#F1F3F4",
-                border: 1,
-                borderColor: "#ccc",
-                borderRadius: 2,
-              }}
-            >
+          <Grid item xs={12} md={4}>
+            <OrderDetailsBox>
               <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
                 Order details
               </Typography>
@@ -303,19 +279,18 @@ const Cart = () => {
               >
                 ${totalAmount.toFixed(2)}
               </Typography>
-              <form onSubmit={(e) => onSubmit(e)}>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <Controller
                   name="name"
                   control={control}
                   defaultValue=""
                   rules={{ required: "Name is required" }}
                   render={({ field }) => (
-                    <TextField
+                    <CustomTextField
                       {...field}
                       label="Name"
                       fullWidth
                       margin="normal"
-                      sx={{ backgroundColor: "white" }}
                       error={!!errors.name}
                       helperText={errors.name ? errors.name.message : ""}
                     />
@@ -328,17 +303,16 @@ const Cart = () => {
                   rules={{
                     required: "Phone number is required",
                     pattern: {
-                      value: /^[0-9]+$/,
+                      value: /^\d{10}$/,
                       message: "Phone number must contain only numbers",
                     },
                   }}
                   render={({ field }) => (
-                    <TextField
+                    <CustomTextField
                       {...field}
                       label="Phone number"
                       fullWidth
                       margin="normal"
-                      sx={{ backgroundColor: "white" }}
                       error={!!errors.phoneNumber}
                       helperText={
                         errors.phoneNumber ? errors.phoneNumber.message : ""
@@ -359,37 +333,38 @@ const Cart = () => {
                     },
                   }}
                   render={({ field }) => (
-                    <TextField
+                    <CustomTextField
                       {...field}
                       label="Email"
                       fullWidth
                       margin="normal"
-                      sx={{ backgroundColor: "white" }}
                       error={!!errors.email}
                       helperText={errors.email ? errors.email.message : ""}
                     />
                   )}
                 />
-                <Button
+                <CustomButton
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={() => setOpen(true)}
                   fullWidth
                   disabled={isLoading}
                 >
                   {isLoading ? <CircularProgress size={24} /> : "Order"}
-                </Button>
+                </CustomButton>
+                {!isValid && formSubmitted && (
+                  <Typography
+                    variant="body2"
+                    color="error"
+                    sx={{ textAlign: "center", marginTop: 2 }}
+                  >
+                    {/* Please fill in all the fields correctly to proceed */}
+                  </Typography>
+                )}
               </form>
               {isError && <Alert severity="error">{message}</Alert>}
-              <DialogWindow
-                open={open}
-                handleClose={handleClose}
-                WindowText={
-                  "Your order has been successfully placed on the website. A manager will contact you shortly."
-                }
-              />
-            </Box>
+              <DialogWindow open={open} handleClose={handleClose} />
+            </OrderDetailsBox>
           </Grid>
         </Grid>
       )}
@@ -401,7 +376,7 @@ const Cart = () => {
       >
         Back to the store
       </Button>
-    </Box>
+    </CartContainer>
   );
 };
 

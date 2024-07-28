@@ -1,13 +1,13 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import Categories from './pages/Categories';
-import Category from './pages/Category';
-import Product from './pages/Product';
-import Cart from './pages/Cart';
-import NotFound from './pages/NotFound';
-import Sales from './pages/Sales';
-import ProductPage from './pages/ProductPage';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "./pages/Layout";
+import Home from "./pages/Home";
+import Categories from "./pages/Categories";
+import Category from "./pages/Category";
+import Product from "./pages/Product";
+import Cart from "./components/Cart/Cart";
+import NotFound from "./pages/NotFound";
+import Sales from "./pages/Sales";
+import ProductPage from "./pages/ProductPage";
 
 const AppRouter = () => {
   return (

@@ -1,8 +1,20 @@
-import { Box, Button, CardContent, CardMedia, Typography } from "@mui/material";
+import { useState } from "react";
+import { Button, CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { addToCart, removeFromCart } from "../redux/slices/cartSlice.js";
+import { addToCart, removeFromCart } from '../../redux/slices/cartSlice.js';
+import {
+  CardBox,
+  DiscountBadge,
+  MediaBox,
+  StyledCardMedia,
+  HoverBox,
+  ProductTitle,
+  PriceBox,
+  DiscountPrice,
+  OriginalPrice,
+  RegularPrice,
+} from "./CardComponentStyles";
 
 const CardComponent = ({ product }) => {
   const dispatch = useDispatch();
@@ -42,51 +54,19 @@ const CardComponent = ({ product }) => {
   };
 
   return (
-    <Box
+    <CardBox
       onClick={redirectToProduct}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        borderRadius: 1,
-        border: "1px solid #e0e0e0",
-        position: "relative",
-        cursor: "pointer",
-        "&:hover": { boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)" },
-      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {product.discont_price && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: "20px",
-            right: "0",
-            backgroundColor: "#2979ff",
-            color: "white",
-            padding: "5px 10px",
-            fontSize: "14px",
-            borderRadius: "4px",
-            zIndex: 1,
-          }}
-        >
+        <DiscountBadge>
           -{Math.round((1 - product.discont_price / product.price) * 100)}%
-        </Box>
+        </DiscountBadge>
       )}
-      <Box sx={{ position: "relative", overflow: "hidden" }}>
-        <CardMedia
+      <MediaBox>
+        <StyledCardMedia
           component="img"
-          sx={{
-            height: "280px",
-            objectFit: "contain",
-            opacity: 1,
-            "&:hover": { opacity: 0.9 },
-            "@media (max-width: 600px)": {
-              height: "280px",
-              objectFit: "contain",
-            },
-          }}
           image={
             product.image
               ? `http://localhost:3333/${product.image}`
@@ -95,17 +75,7 @@ const CardComponent = ({ product }) => {
           alt={product.title}
         />
         {isHovered && (
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              display: "flex",
-              justifyContent: "center",
-              padding: "10px",
-            }}
-          >
+          <HoverBox>
             {isInCart(product.id) ? (
               <Button
                 size="medium"
@@ -134,12 +104,12 @@ const CardComponent = ({ product }) => {
                   "&:hover": {},
                 }}
               >
-                Add to Card
+                Add to Cart
               </Button>
             )}
-          </Box>
+          </HoverBox>
         )}
-      </Box>
+      </MediaBox>
       <CardContent
         sx={{
           flex: "1 0 auto",
@@ -149,52 +119,21 @@ const CardComponent = ({ product }) => {
           justifyContent: "flex-start",
         }}
       >
-        <Typography
-          gutterBottom
-          variant="h6"
-          component="div"
-          sx={{
-            fontSize: "16px",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            color: "#282828",
-          }}
-        >
+        <ProductTitle gutterBottom variant="h6" component="div">
           {product.title}
-        </Typography>
+        </ProductTitle>
         <Typography variant="h6" sx={{ fontSize: "14px" }}>
           {product.discont_price ? (
-            <Box
-              component="span"
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <Box
-                component="span"
-                sx={{ fontSize: "24px", fontWeight: "bold", color: "#ff1744" }}
-              >
-                ${product.discont_price}
-              </Box>
-              <Box
-                component="span"
-                sx={{
-                  fontSize: "18px",
-                  textDecoration: "line-through",
-                  marginLeft: 1,
-                  color: "#b0bec5",
-                }}
-              >
-                ${product.price}
-              </Box>
-            </Box>
+            <PriceBox>
+              <DiscountPrice>${product.discont_price}</DiscountPrice>
+              <OriginalPrice>${product.price}</OriginalPrice>
+            </PriceBox>
           ) : (
-            <Box component="span" sx={{ fontSize: "24px", fontWeight: "bold" }}>
-              ${product.price}
-            </Box>
+            <RegularPrice>${product.price}</RegularPrice>
           )}
         </Typography>
       </CardContent>
-    </Box>
+    </CardBox>
   );
 };
 

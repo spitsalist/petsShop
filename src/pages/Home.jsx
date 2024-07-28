@@ -1,8 +1,8 @@
 import {  Box } from '@mui/material';
 import Categories from './Categories';
-import DiscountForm from './../components/DiscountForm';
+import DiscountForm from '../components/DiscountForm/DiscountForm.jsx';
 import Sales from './../pages/Sales';
-import BannerComponent from "../components/BannerComponent.jsx";
+import BannerComponent from '../components/BannerComponent/BannerComponent.jsx';
 
 
 const Home = () => {

@@ -1,9 +1,8 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import bannerImage from "../assets/pets.png";
-import { Link } from "react-router-dom";
+import bannerImage from './../../assets/pets.png';
 
-const Banner = styled(Box)(({ theme }) => ({
+export const Banner = styled(Box)(({ theme }) => ({
   backgroundImage: `url(${bannerImage})`,
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -19,7 +18,7 @@ const Banner = styled(Box)(({ theme }) => ({
   },
 }));
 
-const BannerText = styled(Typography)(({ theme }) => ({
+export const BannerText = styled(Typography)(({ theme }) => ({
   fontFamily: "Montserrat, sans-serif",
   fontSize: "96px",
   fontWeight: 700,
@@ -39,7 +38,7 @@ const BannerText = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const BannerButton = styled(Button)(({ theme }) => ({
+export const BannerButton = styled(Button)(({ theme }) => ({
   fontSize: "20px",
   padding: "16px 56px",
   gap: "10px",
@@ -58,27 +57,3 @@ const BannerButton = styled(Button)(({ theme }) => ({
     alignSelf: "center",
   },
 }));
-
-const BannerComponent = () => {
-  return (
-    <Banner sx={{ margin: "0 -40px" }}>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: { xs: "center", md: "flex-start" },
-          justifyContent: "center",
-          height: "100%",
-        }}
-      >
-        <BannerText variant="h1">Amazing Discounts</BannerText>
-        <BannerText variant="h1">on Pets Products!</BannerText>
-        <Link to="/sales/all">
-          <BannerButton variant="contained">Check out</BannerButton>
-        </Link>
-      </Container>
-    </Banner>
-  );
-};
-
-export default BannerComponent;

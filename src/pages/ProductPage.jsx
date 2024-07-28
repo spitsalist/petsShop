@@ -5,7 +5,7 @@ import {  Grid, CardMedia, Box, Typography, Button, IconButton, CircularProgress
 import { Add, Remove } from '@mui/icons-material';
 import { fetchProductById } from '../redux/slices/productsSlice';
 import { addToCart } from '../redux/slices/cartSlice';
-import BreadcrumbsComponent from "../components/BreadcrumbsComponent.jsx";
+import BreadcrumbsComponent from '../components/Breadcrumbs/BreadcrumbsComponent';
 
 const ProductPage = () => {
   const { productId } = useParams();

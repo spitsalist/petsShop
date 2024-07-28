@@ -3,9 +3,9 @@ import { Box, Typography, TextField, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { saleRequestSend } from "./../redux/slices/saleRequestSlice";
-import PetImage from "./../assets/images/pets.png";
-import DialogWindow from "./DialogWindow";
+import { saleRequestSend } from '../../redux/slices/saleRequestSlice';
+import PetImage from '../../assets/images/pets.png';
+import DiscountDialog from '../../components/DialogWindow/DialogWindow';
 
 const DiscountSection = styled(Box)(({ theme }) => ({
   gap: "16px",
@@ -20,7 +20,6 @@ const DiscountSection = styled(Box)(({ theme }) => ({
   opacity: 1,
   padding: 0,
   width: "90%",
-
   "@media (max-width: 870px)": {
     width: "100%",
   },
@@ -67,15 +66,24 @@ const PetImageBox = styled(Box)(({ theme }) => ({
 }));
 
 const DiscountForm = () => {
-  const { control, handleSubmit, reset } = useForm();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
   const dispatch = useDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogText, setDialogText] = useState("");
 
   const onSubmit = (data) => {
-    dispatch(saleRequestSend(data));
-    setDialogOpen(true);
-    reset();
+    if (isValid) {
+      dispatch(saleRequestSend(data));
+      setDialogText("You received a 5% discount on your first order!");
+      setDialogOpen(true);
+      reset();
+    }
   };
 
   const handleClose = () => {
@@ -117,6 +125,7 @@ const DiscountForm = () => {
               name="name"
               control={control}
               defaultValue=""
+              rules={{ required: "Name is required" }}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -130,6 +139,7 @@ const DiscountForm = () => {
                       notchedOutline: "MuiOutlinedInput-notchedOutline",
                     },
                   }}
+                  FormHelperTextProps={{ style: { color: "yellow" } }}
                   sx={{
                     width: "100%",
                     "& .MuiOutlinedInput-root": {
@@ -148,6 +158,8 @@ const DiscountForm = () => {
                       width: "80%",
                     },
                   }}
+                  error={!!errors.name}
+                  helperText={errors.name ? errors.name.message : ""}
                 />
               )}
             />
@@ -155,6 +167,13 @@ const DiscountForm = () => {
               name="phone"
               control={control}
               defaultValue=""
+              rules={{
+                required: "Phone number is required",
+                pattern: {
+                  value: /^\d{10}$/,
+                  message: "Please enter a valid 10-digit phone number",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -163,12 +182,12 @@ const DiscountForm = () => {
                   fullWidth
                   InputLabelProps={{ style: { color: "white" } }}
                   InputProps={{
-                    pattern: "^\\d{10}$",
                     style: { color: "white" },
                     classes: {
                       notchedOutline: "MuiOutlinedInput-notchedOutline",
                     },
                   }}
+                  FormHelperTextProps={{ style: { color: "yellow" } }}
                   sx={{
                     width: "100%",
                     "& .MuiOutlinedInput-root": {
@@ -187,12 +206,8 @@ const DiscountForm = () => {
                       width: "80%",
                     },
                   }}
-                  error={!/^\d{10}$/.test(field.value) && field.value !== ""}
-                  helperText={
-                    !/^\d{10}$/.test(field.value) && field.value !== ""
-                      ? "Please enter a valid 10-digit phone number"
-                      : ""
-                  }
+                  error={!!errors.phone}
+                  helperText={errors.phone ? errors.phone.message : ""}
                 />
               )}
             />
@@ -200,6 +215,13 @@ const DiscountForm = () => {
               name="email"
               control={control}
               defaultValue=""
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Please enter a valid email address",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -208,12 +230,12 @@ const DiscountForm = () => {
                   fullWidth
                   InputLabelProps={{ style: { color: "white" } }}
                   InputProps={{
-                    pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
                     style: { color: "white" },
                     classes: {
                       notchedOutline: "MuiOutlinedInput-notchedOutline",
                     },
                   }}
+                  FormHelperTextProps={{ style: { color: "yellow" } }}
                   sx={{
                     width: "100%",
                     "& .MuiOutlinedInput-root": {
@@ -232,16 +254,8 @@ const DiscountForm = () => {
                       width: "80%",
                     },
                   }}
-                  error={
-                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value) &&
-                    field.value !== ""
-                  }
-                  helperText={
-                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value) &&
-                    field.value !== ""
-                      ? "Please enter a valid email address"
-                      : ""
-                  }
+                  error={!!errors.email}
+                  helperText={errors.email ? errors.email.message : ""}
                 />
               )}
             />
@@ -270,7 +284,11 @@ const DiscountForm = () => {
           </FormBox>
         </ContentBox>
       </DiscountSection>
-      <DialogWindow open={dialogOpen} handleClose={handleClose} />
+      <DiscountDialog
+        open={dialogOpen}
+        handleClose={handleClose}
+        WindowText={dialogText}
+      />
     </Box>
   );
 };
